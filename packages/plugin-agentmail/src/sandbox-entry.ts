@@ -1,5 +1,4 @@
-import { definePlugin } from "emdash";
-import type { PluginContext } from "emdash";
+import type { PluginContext, SandboxedPlugin } from "emdash/plugin";
 
 // ---------------------------------------------------------------------------
 // Branded email config — shared shape for all email types
@@ -562,7 +561,7 @@ function extractCtaUrl(html: string): string {
 	return match?.[1] ?? "";
 }
 
-export default definePlugin({
+export default {
 	hooks: {
 		"email:deliver": {
 			exclusive: true,
@@ -693,4 +692,4 @@ export default definePlugin({
 			},
 		},
 	},
-});
+} satisfies SandboxedPlugin;
