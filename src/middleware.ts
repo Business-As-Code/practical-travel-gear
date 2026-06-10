@@ -6,6 +6,7 @@
  * the POP rather than re-running SSR + D1.
  */
 import { defineMiddleware } from "astro:middleware";
+import { env } from "cloudflare:workers";
 import { wpRedirects } from "./data/wp-redirects";
 
 // Individual content pages (posts, pages, guides, root-level slugs) rarely
@@ -35,6 +36,16 @@ const CONTENT_PATHS: RegExp[] = [
 	/^\/[^/._]+\/?$/,
 ];
 
+const SCHEDULED_TABLES = ["ec_posts", "ec_pages", "ec_guides"] as const;
+
+type ScheduledContentDb = {
+	prepare(query: string): {
+		bind(...values: string[]): {
+			run(): Promise<unknown>;
+		};
+	};
+};
+
 function cacheControlFor(pathname: string): string | null {
 	if (pathname.startsWith("/_emdash")) return null;
 	if (pathname.startsWith("/api/")) return null;
@@ -52,6 +63,28 @@ function shouldSkipCache(request: Request): boolean {
 	return false;
 }
 
+async function publishDueScheduledContent(db: ScheduledContentDb) {
+	const now = new Date().toISOString();
+
+	await Promise.all(
+		SCHEDULED_TABLES.map((table) =>
+			db.prepare(`
+				UPDATE ${table}
+				SET status = 'published',
+					published_at = COALESCE(published_at, scheduled_at, ?),
+					scheduled_at = NULL,
+					updated_at = ?
+				WHERE status = 'scheduled'
+					AND scheduled_at IS NOT NULL
+					AND scheduled_at <= ?
+					AND deleted_at IS NULL
+			`)
+				.bind(now, now, now)
+				.run(),
+		),
+	);
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
 	const { pathname } = context.url;
 	const { request } = context;
@@ -63,6 +96,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
 	const routeCacheControl = request.method === "GET" ? cacheControlFor(pathname) : null;
 	const cacheable = routeCacheControl !== null && !shouldSkipCache(request);
+
+	if (request.method === "GET" && !pathname.startsWith("/_emdash")) {
+		await publishDueScheduledContent(env.DB);
+	}
 
 	if (!cacheable) {
 		const r = await next();
