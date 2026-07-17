@@ -8,7 +8,6 @@
 	"include": [
 		"src",
 		"packages",
-		".astro/types.d.ts",
-		"emdash-env.d.ts"
+		".astro/types.d.ts"
 	]
 }

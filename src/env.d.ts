@@ -1,4 +1,4 @@
-/// <reference path="../emdash-env.d.ts" />
+/// <reference types="emdash/locals" />
 
 import type { EntryResult } from "emdash";
 
