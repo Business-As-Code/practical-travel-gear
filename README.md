@@ -47,10 +47,26 @@ A clean, minimal blog built with [EmDash](https://github.com/emdash-cms/emdash) 
 ## Local Development
 
 ```bash
-pnpm install
-pnpm bootstrap
-pnpm dev
+npm ci
+npm run typecheck
+npm run build
+npm run verify:x402
+npm run dev
 ```
+
+`npm run verify:x402` exercises the non-paying spike handler locally. It checks
+for HTTP 402, the required protocol headers, Base Sepolia metadata, and the
+zero-address placeholder that prevents payment. It does not contact a
+facilitator, use a wallet, settle a payment, or deploy anything.
+
+EmDash generates `emdash-env.d.ts` from the active local D1 schema. The file is
+intentionally untracked so starting local development cannot dirty the source
+tree. Stable compile-time collection declarations live in
+`src/emdash-collections.d.ts`; update them with `seed/seed.json`, then run
+`npm run typecheck` after schema changes.
+
+Current dependency findings and the production-upgrade gate are recorded in
+[`docs/dependency-audit-2026-07-16.md`](docs/dependency-audit-2026-07-16.md).
 
 ## Deploying
 

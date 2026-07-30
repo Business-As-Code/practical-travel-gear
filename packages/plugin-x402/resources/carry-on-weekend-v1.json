@@ -1,0 +1,104 @@
+{
+  "id": "carry-on-weekend-v1",
+  "title": "Carry-on weekend packing starter",
+  "version": "1.0.0",
+  "updated_at": "2026-07-14",
+  "trip_type": "weekend_carry_on",
+  "currency_note": "PTG synthetic crawl resource — not a live product catalog",
+  "categories": [
+    {
+      "name": "documents",
+      "items": [
+        {
+          "name": "passport_or_id",
+          "required": true,
+          "notes": "Match destination entry rules"
+        },
+        {
+          "name": "boarding_pass",
+          "required": false,
+          "notes": "Digital or printed"
+        }
+      ]
+    },
+    {
+      "name": "clothing",
+      "items": [
+        {
+          "name": "tops",
+          "qty_hint": 2,
+          "required": true
+        },
+        {
+          "name": "bottoms",
+          "qty_hint": 1,
+          "required": true
+        },
+        {
+          "name": "sleepwear",
+          "qty_hint": 1,
+          "required": false
+        },
+        {
+          "name": "light_layer",
+          "qty_hint": 1,
+          "required": true,
+          "notes": "Cabin cold + weather swing"
+        }
+      ]
+    },
+    {
+      "name": "toiletries",
+      "items": [
+        {
+          "name": "tsa_liquids_bag",
+          "required": true,
+          "notes": "3-1-1 compliant when flying US security"
+        },
+        {
+          "name": "toothbrush_kit",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "tech",
+      "items": [
+        {
+          "name": "phone_charger",
+          "required": true
+        },
+        {
+          "name": "headphones",
+          "required": false
+        },
+        {
+          "name": "power_bank",
+          "required": false,
+          "notes": "Check airline capacity rules"
+        }
+      ]
+    },
+    {
+      "name": "carry_essentials",
+      "items": [
+        {
+          "name": "refillable_water_bottle_empty",
+          "required": false
+        },
+        {
+          "name": "medications",
+          "required": true,
+          "notes": "In original packaging when possible"
+        }
+      ]
+    }
+  ],
+  "decision_notes": [
+    "Prefer multi-wear pieces over single-use outfits for a weekend.",
+    "Weigh bag before leaving home; leave 1-2 kg slack for souvenirs.",
+    "Keep liquids and meds in a top-access pocket for security."
+  ],
+  "license": "PTG-owned synthetic data for agent payment crawl; no third-party copyrighted text",
+  "disclaimer": "Illustrative packing guidance only. Not travel, legal, or medical advice."
+}
