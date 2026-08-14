@@ -1,0 +1,53 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": { "name": "SEO audit connector fixture", "description": "Test page set for scripts/seo-audit-tasks.mjs" },
+	"content": {
+		"pages": [
+			{
+				"id": "about",
+				"slug": "about",
+				"status": "published",
+				"data": { "title": "About" }
+			},
+			{
+				"id": "contact",
+				"slug": "contact",
+				"status": "published",
+				"seo": { "description": "How to reach the Practical Travel Gear team." },
+				"data": { "title": "Contact" }
+			}
+		],
+		"posts": [
+			{
+				"id": "post-ok",
+				"slug": "best-carry-on-backpacks",
+				"status": "published",
+				"data": {
+					"title": "Best Carry-On Backpacks",
+					"excerpt": "Nine carry-on backpacks tested across 40 flights. These are the ones worth buying."
+				}
+			},
+			{
+				"id": "post-empty-excerpt",
+				"slug": "packing-cubes-worth-it",
+				"status": "published",
+				"data": { "title": "Are Packing Cubes Worth It?", "excerpt": "   " }
+			},
+			{
+				"id": "post-draft",
+				"slug": "unfinished-draft",
+				"status": "draft",
+				"data": { "title": "Unfinished Draft" }
+			}
+		],
+		"guides": [
+			{
+				"id": "guide-1",
+				"slug": "one-bag-travel",
+				"status": "published",
+				"data": { "title": "One-Bag Travel Guide" }
+			}
+		]
+	}
+}

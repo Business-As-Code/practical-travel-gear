@@ -11,6 +11,9 @@
 		"build": "astro build",
 		"preview": "astro preview",
 		"deploy": "astro build && wrangler deploy",
+		"test": "node --test scripts/seo-audit-tasks.test.mjs",
+		"audit:tasks": "node scripts/seo-audit-tasks.mjs",
+		"audit:tasks:test": "node --test scripts/seo-audit-tasks.test.mjs",
 		"typecheck": "astro check"
 	},
 	"dependencies": {
