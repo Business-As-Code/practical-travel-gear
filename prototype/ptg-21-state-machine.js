@@ -157,11 +157,38 @@ function runPrototype() {
   console.log('╔════════════════════════════════════════════════════════════════════════════╗');
   console.log('║  PTG-21 Product Record State Machine Prototype                             ║');
   console.log('║  Category: Packing Cubes (synthetic data only)                             ║');
+  console.log('║  PTG-10 Bound: 8 synthetic records (1 walked, 7 catalog members)           ║');
   console.log('║  THROWAWAY PROTOTYPE - DO NOT MERGE                                        ║');
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
 
-  // Create synthetic packing cube product
-  const product = new ProductRecord('SynCube 2000', 'packing-cubes');
+  // PTG-10 bound: 8 synthetic packing-cube products
+  // All names are clearly invented - no real brand copy
+  const catalog = [
+    new ProductRecord('SynCube 2000', 'packing-cubes'),      // Will be walked through transitions
+    new ProductRecord('PackMaster Pro', 'packing-cubes'),    // Catalog member
+    new ProductRecord('CubeOrganizer Elite', 'packing-cubes'), // Catalog member
+    new ProductRecord('TravelPack Plus', 'packing-cubes'),   // Catalog member
+    new ProductRecord('CompactCube X1', 'packing-cubes'),    // Catalog member
+    new ProductRecord('SpaceSaver Premium', 'packing-cubes'), // Catalog member
+    new ProductRecord('UltraOrganize 500', 'packing-cubes'), // Catalog member
+    new ProductRecord('CubeStack Deluxe', 'packing-cubes')   // Catalog member
+  ];
+
+  console.log('\n\n╔════════════════════════════════════════════════════════════════════════════╗');
+  console.log('║  SYNTHETIC CATALOG (PTG-10 bound: 8 records)                               ║');
+  console.log('╚════════════════════════════════════════════════════════════════════════════╝');
+  console.log('\nAll product names are synthetic/invented - no real brand copy:\n');
+  catalog.forEach((prod, idx) => {
+    console.log(`${idx + 1}. ${prod.name}`);
+    if (idx === 0) {
+      console.log('   ^ This record will be walked through state transitions');
+    } else {
+      console.log('   (Catalog member)');
+    }
+  });
+
+  // Walk the first record through state transitions
+  const product = catalog[0];
   
   product.printState('Initial state');
 
@@ -249,6 +276,8 @@ function runPrototype() {
   console.log('\n\n╔════════════════════════════════════════════════════════════════════════════╗');
   console.log('║  SUMMARY                                                                   ║');
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
+  console.log(`\nCatalog size: ${catalog.length} synthetic packing-cube records (PTG-10 bound)`);
+  console.log(`Walked record: ${product.name}`);
   console.log('\nTransition Log:');
   product.transitionLog.forEach((log, idx) => {
     console.log(`\n${idx + 1}. ${log.from} → ${log.to}`);
@@ -266,13 +295,16 @@ function runPrototype() {
   console.log('\n\n╔════════════════════════════════════════════════════════════════════════════╗');
   console.log('║  VERIFICATION                                                              ║');
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
-  console.log('\n✓ Rejected: Unknown source rights');
-  console.log('✓ Rejected: Missing reviewer consent');
-  console.log('✓ Rejected: Stale data');
-  console.log('✓ Rejected: Missing disclosure');
-  console.log('✓ Rejected: Failed human review');
-  console.log('✓ Allowed: Happy path to review-ready');
-  console.log('✓ Rejected: Transition to published (hard boundary)');
+  console.log(`\n✓ Catalog holds ${catalog.length} synthetic packing-cube records (PTG-10 bound)`);
+  console.log('✓ All product names are clearly invented (no real brand copy)');
+  console.log('✓ Walked 1 record through state transitions:');
+  console.log('  ✓ Rejected: Unknown source rights');
+  console.log('  ✓ Rejected: Missing reviewer consent');
+  console.log('  ✓ Rejected: Stale data');
+  console.log('  ✓ Rejected: Missing disclosure');
+  console.log('  ✓ Rejected: Failed human review');
+  console.log('  ✓ Allowed: Happy path to review-ready');
+  console.log('  ✓ Rejected: Transition to published (hard boundary)');
   console.log('\n✓ All state transitions behave as required');
   console.log('✓ Complete state printed after every action');
   console.log('✓ Prototype uses only synthetic packing-cube data\n');

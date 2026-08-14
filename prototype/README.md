@@ -6,6 +6,8 @@
 
 Test whether one synthetic packing-cube product record can preserve source-rights, freshness, reviewer-consent, disclosure, and human-review state through draft generation while rejecting every unknown or disallowed transition.
 
+**PTG-10 Bound**: The prototype holds 8 synthetic packing-cube records (the category proof bound from PTG-10). One record is walked through all state transitions; the other 7 exist as catalog members to demonstrate the bound.
+
 ## Linear Context
 
 - **Issue**: [PTG-21 - Test the PTG product-record state model](https://linear.app/scale-lean/issue/PTG-21/test-the-ptg-product-record-state-model)
@@ -62,9 +64,17 @@ Simple finite-state machine with explicit illegal-transition errors. State trans
 
 ## Safe Inputs
 
-- Product: "SynCube 2000" (synthetic)
-- Category: "packing-cubes" (synthetic)
-- All facts are clearly fake - no real brand copy, reviews, or site content
+8 synthetic packing-cube product records (PTG-10 bound):
+1. **SynCube 2000** (walked through state transitions)
+2. **PackMaster Pro** (catalog member)
+3. **CubeOrganizer Elite** (catalog member)
+4. **TravelPack Plus** (catalog member)
+5. **CompactCube X1** (catalog member)
+6. **SpaceSaver Premium** (catalog member)
+7. **UltraOrganize 500** (catalog member)
+8. **CubeStack Deluxe** (catalog member)
+
+All names are clearly invented/synthetic. No real brand copy, reviews, or site content. Category: "packing-cubes" (synthetic).
 
 ## Mutation Boundary
 
@@ -100,11 +110,13 @@ The script prints **complete state after every action**, including:
 ## Evidence
 
 Running the script demonstrates:
-1. One synthetic packing-cube record moves through state transitions
-2. Each rejected path prints specific blocking reason(s)
-3. Happy path reaches `review-ready`
-4. Transition to `published` is always rejected
-5. Complete state is visible after every mutation
+1. Catalog holds 8 synthetic packing-cube records (PTG-10 bound)
+2. All product names are clearly invented (no real brands)
+3. One record (SynCube 2000) is walked through state transitions
+4. Each rejected path prints specific blocking reason(s)
+5. Happy path reaches `review-ready`
+6. Transition to `published` is always rejected
+7. Complete state is visible after every mutation
 
 ## Next Steps (NOT in this prototype)
 
