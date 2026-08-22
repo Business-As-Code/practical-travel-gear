@@ -44,18 +44,16 @@ const [socialMenu, tags] = await Promise.all([
 	getTaxonomyTerms("tag"),
 ]);
 
-// Activity-led primary nav. Hardcoded to match the design — these are
-// category taxonomy links; terms don't all exist yet but will be created
-// as content gets tagged.
+// Primary nav points at real category terms + guides. Fake slugs 404.
 const navItems: Array<{ label: string; url: string; icon: string | null }> = [
 	{ label: "Home", url: "/", icon: null },
-	{ label: "Luggage", url: "/category/luggage", icon: "luggage" },
-	{ label: "Packs", url: "/category/packs", icon: "pack" },
-	{ label: "Apparel", url: "/category/apparel", icon: "shirt" },
-	{ label: "Footwear", url: "/category/footwear", icon: "boot" },
-	{ label: "Tech", url: "/category/tech", icon: "cable" },
-	{ label: "Accessories", url: "/category/accessories", icon: "tag" },
-	{ label: "Camping", url: "/category/camping", icon: "tent" },
+	{ label: "Guides", url: "/guides", icon: null },
+	{ label: "Luggage", url: "/category/travel-luggage-bags", icon: "luggage" },
+	{ label: "Apparel", url: "/category/clothing", icon: "shirt" },
+	{ label: "Footwear", url: "/category/shoes-boots", icon: "boot" },
+	{ label: "Accessories", url: "/category/travel-accessories", icon: "tag" },
+	{ label: "Camping", url: "/category/camping-gear", icon: "tent" },
+	{ label: "Tech", url: "/category/technology", icon: "cable" },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -83,7 +81,6 @@ const isLoggedIn = !!Astro.locals.user;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{fullTitle}</title>
-		<meta name="keywords" content="Travel Gear, Travel Accessories, Travel Gadgets, Travel Reviews" />
 		<meta name="msvalidate.01" content="07E94CDED103E81EC7F6E0E82FAB530C" />
 		<meta name="google-site-verification" content="EcYP6zf6ISsPzc-RbCRJLuPGMMdsuh05-8EyyvSR59A" />
 		<meta name="p:domain_verify" content="289fb7405ceb69ac12f7a6fde776fe22" />
