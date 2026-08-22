@@ -8,17 +8,18 @@ import { Image, PortableText } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import { getReadingTime } from "../../utils/reading-time";
 import { getBylineAvatar } from "../../utils/gravatar";
+import { rewriteNotFound } from "../../lib/not-found";
 
 const { slug } = Astro.params;
 
 if (!slug) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 const { entry: guide, cacheHint } = await getEmDashEntry("guides", slug);
 
 if (!guide) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 Astro.cache.set(cacheHint);

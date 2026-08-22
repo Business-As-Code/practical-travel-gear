@@ -97,7 +97,7 @@ function iso(d: Date | string | null | undefined): string | undefined {
 
 export async function collectPublished(
 	collection: "posts" | "guides" | "pages",
-	opts?: { exclude?: Set<string> },
+	opts?: { exclude?: Set<string>; limit?: number },
 ) {
 	const entries: Array<{
 		slug: string;
@@ -109,11 +109,12 @@ export async function collectPublished(
 
 	let cursor: string | undefined;
 	for (let i = 0; i < 80; i++) {
+		const remaining = opts?.limit ? opts.limit - entries.length : 100;
 		const { entries: batch, nextCursor } = await getEmDashCollection(
 			collection,
 			{
 				status: "published",
-				limit: 100,
+				limit: Math.min(100, remaining),
 				orderBy: { published_at: "desc" },
 				cursor,
 			},
@@ -134,6 +135,9 @@ export async function collectPublished(
 				publishedAt: data.publishedAt,
 				updatedAt: data.updatedAt,
 			});
+			if (opts?.limit && entries.length >= opts.limit) {
+				return entries;
+			}
 		}
 		if (!nextCursor || batch.length === 0) break;
 		cursor = nextCursor;

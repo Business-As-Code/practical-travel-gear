@@ -10,11 +10,12 @@ import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
 import { getBylineAvatar } from "../../utils/gravatar";
+import { rewriteNotFound } from "../../lib/not-found";
 
 const { slug } = Astro.params;
 
 if (!slug) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 // If accessed directly (not via rewrite from catch-all),
@@ -30,7 +31,7 @@ const { entry: post, cacheHint } =
 		: await getEmDashEntry("posts", slug);
 
 if (!post) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 Astro.cache.set(cacheHint);

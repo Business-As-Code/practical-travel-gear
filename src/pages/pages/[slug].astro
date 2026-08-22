@@ -2,11 +2,12 @@
 import { getEmDashEntry } from "emdash";
 import { PortableText } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
+import { rewriteNotFound } from "../../lib/not-found";
 
 const { slug } = Astro.params;
 
 if (!slug) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 // If accessed directly (not via rewrite from catch-all),
@@ -22,7 +23,7 @@ const { entry: page, cacheHint } =
 		: await getEmDashEntry("pages", slug);
 
 if (!page) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 Astro.cache.set(cacheHint);

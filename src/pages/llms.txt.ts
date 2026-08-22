@@ -3,8 +3,8 @@ import { collectPublished, siteUrl, textResponse } from "../lib/seo-feeds";
 
 export const GET: APIRoute = async () => {
 	const [guides, posts] = await Promise.all([
-		collectPublished("guides"),
-		collectPublished("posts"),
+		collectPublished("guides", { limit: 40 }),
+		collectPublished("posts", { limit: 25 }),
 	]);
 
 	const guideLines = guides
@@ -44,5 +44,5 @@ ${postLines}
 - Sitemap: ${siteUrl("/sitemap.xml")}
 `;
 
-	return textResponse(body);
+	return textResponse(body, 21600);
 };
