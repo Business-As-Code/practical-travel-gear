@@ -97,7 +97,7 @@ function iso(d: Date | string | null | undefined): string | undefined {
 
 export async function collectPublished(
 	collection: "posts" | "guides" | "pages",
-	opts?: { exclude?: Set<string> },
+	opts?: { exclude?: Set<string>; limit?: number },
 ) {
 	const entries: Array<{
 		slug: string;
@@ -134,6 +134,9 @@ export async function collectPublished(
 				publishedAt: data.publishedAt,
 				updatedAt: data.updatedAt,
 			});
+			if (opts?.limit && entries.length >= opts.limit) {
+				return entries;
+			}
 		}
 		if (!nextCursor || batch.length === 0) break;
 		cursor = nextCursor;

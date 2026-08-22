@@ -7,10 +7,11 @@
  * to the appropriate handler without changing the URL.
  */
 import { getEmDashEntry } from "emdash";
+import { rewriteNotFound } from "../lib/not-found";
 
 const slugSegments = Astro.params.slug;
 if (!slugSegments) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
 // For multi-segment paths like /2024/05/my-post (date-based WP URLs),
@@ -51,5 +52,5 @@ if (pageResult.entry) {
 	return rewriteTo(`/pages/${slug}`);
 }
 
-return Astro.redirect("/404");
+return rewriteNotFound(Astro);
 ---
