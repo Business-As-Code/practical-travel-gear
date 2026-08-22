@@ -109,11 +109,12 @@ export async function collectPublished(
 
 	let cursor: string | undefined;
 	for (let i = 0; i < 80; i++) {
+		const remaining = opts?.limit ? opts.limit - entries.length : 100;
 		const { entries: batch, nextCursor } = await getEmDashCollection(
 			collection,
 			{
 				status: "published",
-				limit: 100,
+				limit: Math.min(100, remaining),
 				orderBy: { published_at: "desc" },
 				cursor,
 			},
