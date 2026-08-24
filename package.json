@@ -12,7 +12,10 @@
 		"preview": "astro preview",
 		"deploy": "astro build && wrangler deploy",
 		"typecheck": "astro check",
-		"verify:x402": "node scripts/verify-x402-spike.mjs"
+		"verify:x402": "node scripts/verify-x402-spike.mjs",
+		"verify:x402:route": "node scripts/verify-x402-route.mjs",
+		"x402:wallet": "node scripts/x402-gen-wallet.mjs",
+		"x402:buyer": "node scripts/x402-buyer-agent.mjs"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^13.1.6",
@@ -29,6 +32,8 @@
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"typescript": "^6.0.2",
+		"viem": "^2.55.2",
+		"x402": "^1.2.0",
 		"y-protocols": "^1.0.7",
 		"yjs": "^13.6.30"
 	},
