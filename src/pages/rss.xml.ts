@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getEmDashCollection } from "emdash";
+import { collectPublished } from "../lib/seo-feeds";
 
 const siteTitle = "Practical Travel Gear";
 const siteDescription = "Honest travel gear reviews, buying guides, and travel tips.";
@@ -7,19 +7,16 @@ const siteDescription = "Honest travel gear reviews, buying guides, and travel t
 export const GET: APIRoute = async ({ site, url }) => {
 	const siteUrl = site?.toString() || url.origin;
 
-	const { entries: posts } = await getEmDashCollection("posts", {
-		orderBy: { published_at: "desc" },
-		limit: 20,
-	});
+	const posts = await collectPublished("posts", { limit: 20 });
 
 	const items = posts
 		.map((post) => {
-			if (!post.data.publishedAt) return null;
-			const pubDate = post.data.publishedAt.toUTCString();
+			if (!post.publishedAt) return null;
+			const pubDate = new Date(post.publishedAt).toUTCString();
 
-			const postUrl = `${siteUrl}/${post.id}`;
-			const title = escapeXml(post.data.title || "Untitled");
-			const description = escapeXml(post.data.excerpt || "");
+			const postUrl = `${siteUrl.replace(/\/$/, "")}/${post.slug}`;
+			const title = escapeXml(post.title || "Untitled");
+			const description = escapeXml(post.excerpt || "");
 
 			return `    <item>
       <title>${title}</title>

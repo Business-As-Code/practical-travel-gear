@@ -1,75 +1,37 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { DatabaseSync } from 'node:sqlite';
-import { cachePolicy, serveCached } from '../src/lib/edge-cache.ts';
+import { cachePolicy, applyCachePolicy, invalidateMediaWrite } from '../src/lib/edge-cache.ts';
 import { loadFeedEntries } from '../src/lib/feed-entries.ts';
 
-function memoryCache() {
-  const entries = new Map();
-  return {
-    async match(key) { return entries.get(key.url)?.clone(); },
-    async put(key, response) { entries.set(key.url, response); },
-  };
-}
 const req = (path = '/', init) => new Request(`https://practicaltravelgear.com${path}`, init);
+const html = (headers = {}, status = 200) => new Response('body', { status, headers: { 'content-type': 'text/html', ...headers } });
 
-test('repeat public reads return before CMS or database work', async () => {
-  const cache = memoryCache();
-  const pending = [];
-  const ctx = { waitUntil: p => pending.push(p) };
-  let renders = 0;
-  const render = async () => { renders++; return new Response('public article', { headers: { 'content-type': 'text/html' } }); };
-  const cold = await serveCached(req(), render, cache, ctx);
-  assert.equal(cold.headers.get('x-edge-cache'), 'miss');
-  await Promise.all(pending);
-  const warm = await serveCached(req(), render, cache, ctx);
-  assert.equal(await warm.text(), 'public article');
-  assert.equal(warm.headers.get('x-edge-cache'), 'hit');
-  assert.equal(renders, 1);
+test('public responses use native cache with CMS invalidation tags', () => {
+  const result = applyCachePolicy(req('/article'), html({ 'cache-tag': 'article-id,astro-version:123' }));
+  assert.equal(result.headers.get('cloudflare-cdn-cache-control'), 'public, max-age=3600');
+  assert.equal(result.headers.get('cache-control'), 'public, max-age=0, must-revalidate');
+  for (const tag of ['article-id', 'astro-version:123', 'posts', 'emdash:settings', 'emdash:taxonomy:tag', 'emdash:widget-area:footer']) assert.ok(result.headers.get('cache-tag').split(',').includes(tag));
+  assert.equal(applyCachePolicy(req('/'), html()).headers.get('cloudflare-cdn-cache-control'), 'public, max-age=300');
 });
 
-test('authentication, previews, APIs and writes bypass public cache', async () => {
-  const requests = [
-    req('/', { headers: { cookie: 'astro-session=editor' } }),
-    req('/', { headers: { cookie: 'a=b; emdash-edit-mode=true' } }),
-    req('/', { headers: { authorization: 'Bearer test' } }),
-    req('/?_preview=test'), req('/?preview=true'), req('/_emdash/admin'),
-    req('/api/private'), req('/', { method: 'POST' }), req('/', { method: 'HEAD' }),
-  ];
-  for (const request of requests) {
+test('private requests, unclassified routes, errors and variant responses opt out of heuristic caching', () => {
+  for (const request of [req('/', { headers: { cookie: 'astro-session=editor' } }), req('/', { headers: { cookie: 'a=b; emdash-edit-mode=true' } }), req('/', { headers: { authorization: 'Bearer test' } }), req('/?_preview=test'), req('/?preview=true'), req('/_emdash/admin'), req('/api/private'), req('/', { method: 'POST' }), req('/unknown/deep/route')]) {
     assert.equal(cachePolicy(request), null);
-    const cache = { match() { assert.fail('private cache read'); }, put() { assert.fail('private cache write'); } };
-    assert.equal(await (await serveCached(request, async () => new Response('private'), cache, { waitUntil() {} })).text(), 'private');
+    assert.equal(applyCachePolicy(request, html()).headers.get('cloudflare-cdn-cache-control'), 'no-store');
   }
+  for (const headers of [{ 'cache-control': 'private, no-store' }, { 'cache-control': 'no-cache' }, { 'cache-control': 's-maxage=0' }, { 'set-cookie': 'astro-session=test' }, { vary: 'Cookie' }, { vary: '*' }]) assert.equal(applyCachePolicy(req(), html(headers)).headers.get('cloudflare-cdn-cache-control'), 'no-store');
+  assert.equal(applyCachePolicy(req(), html({}, 500)).headers.get('cloudflare-cdn-cache-control'), 'no-store');
 });
 
-test('tracking variants share a cache key; search and pagination remain distinct', () => {
-  assert.equal(cachePolicy(req('/?utm_source=a&gclid=123')).key.url, cachePolicy(req()).key.url);
-  assert.notEqual(cachePolicy(req('/search?q=bags')).key.url, cachePolicy(req('/search?q=boots')).key.url);
-  assert.notEqual(cachePolicy(req('/posts?cursor=abc')).key.url, cachePolicy(req('/posts?cursor=def')).key.url);
+test('shorter native or origin freshness policies are retained', () => {
+  for (const headers of [{ 'cache-control': 'public, s-maxage=60' }, { 'cloudflare-cdn-cache-control': 'public, max-age=60' }]) assert.equal(applyCachePolicy(req('/article'), html(headers)).headers.get('cloudflare-cdn-cache-control'), 'public, max-age=60');
+});
+
+test('feeds receive invalidation tags and public media keeps its explicit policy', () => {
   for (const path of ['/llms.txt', '/sitemap-posts.xml', '/sitemap-pages.xml', '/sitemap-guides.xml', '/robots.txt']) assert.equal(cachePolicy(req(path)).maxAge, 3600);
-});
-
-test('private or variant responses and errors are never stored', async () => {
-  for (const options of [
-    { headers: { 'cache-control': 'private, no-store' } },
-    { headers: { 'cache-control': 'no-cache' } },
-    { headers: { 'cache-control': 's-maxage=0' } },
-    { headers: { 'set-cookie': 'astro-session=test' } },
-    { headers: { vary: 'Cookie' } }, { headers: { vary: '*' } }, { status: 500 },
-  ]) {
-    const cache = { async match() {}, async put() { assert.fail('non-public cache write'); } };
-    await serveCached(req(), async () => new Response('body', { ...options, headers: { 'content-type': 'text/html', ...options.headers } }), cache, { waitUntil() { assert.fail('cache queued'); } });
-  }
-});
-
-test('cache freshness never exceeds a shorter response policy', async () => {
-  let stored;
-  const cache = { async match() {}, async put(_key, response) { stored = response; } };
-  const pending = [];
-  await serveCached(req('/article'), async () => new Response('ok', { headers: { 'content-type': 'text/html', 'cache-control': 'public, s-maxage=60' } }), cache, { waitUntil: p => pending.push(p) });
-  await Promise.all(pending);
-  assert.equal(stored.headers.get('cache-control'), 'public, max-age=0, s-maxage=60');
+  const media = applyCachePolicy(req('/_image'), new Response('image', { headers: { 'content-type': 'image/webp', 'cache-control': 'public, max-age=31536000, immutable' } }));
+  assert.equal(media.headers.get('cache-control'), 'public, max-age=31536000, immutable');
 });
 
 function feedFixture() {
@@ -110,4 +72,22 @@ test('exclusions do not consume the requested feed limit', async () => {
   const entries = await loadFeedEntries(db, 'posts', { limit: 2, exclude: new Set(['post-509', 'post-508']) });
   assert.deepEqual(entries.map(x => x.slug), ['post-507', 'post-506']);
   sqlite.close();
+});
+
+
+test('successful media mutations purge images and referring pages; failed writes do not', async () => {
+  const calls = [];
+  const purge = async options => { calls.push(options); return { success: true }; };
+  await invalidateMediaWrite(req('/_emdash/api/media/123/replace', { method: 'POST' }), new Response('{}'), purge);
+  assert.ok(calls[0].tags.includes('media') && calls[0].tags.includes('posts'));
+  await invalidateMediaWrite(req('/_emdash/api/media/123/replace', { method: 'POST' }), new Response('{}', { status: 403 }), purge);
+  await invalidateMediaWrite(req('/_emdash/api/media/123'), new Response('{}'), purge);
+  assert.equal(calls.length, 1);
+});
+
+
+test('Astro browser revalidation does not cancel explicit CDN freshness', () => {
+  const headers = { 'cache-control': 'no-cache', 'cloudflare-cdn-cache-control': 'public, max-age=300' };
+  assert.equal(applyCachePolicy(req(), html(headers)).headers.get('cloudflare-cdn-cache-control'), 'public, max-age=300');
+  assert.equal(applyCachePolicy(req(), html({ ...headers, 'cache-control': 'private, no-store' })).headers.get('cloudflare-cdn-cache-control'), 'no-store');
 });
