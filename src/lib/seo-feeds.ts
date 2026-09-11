@@ -1,4 +1,5 @@
-import { getEmDashCollection } from "emdash";
+import { env } from "cloudflare:workers";
+import { loadFeedEntries } from "./feed-entries";
 
 const SITE = "https://practicaltravelgear.com";
 
@@ -97,53 +98,13 @@ function iso(d: Date | string | null | undefined): string | undefined {
 
 export async function collectPublished(
 	collection: "posts" | "guides" | "pages",
-	opts?: { exclude?: Set<string> },
+	opts?: { exclude?: Set<string>; limit?: number },
 ) {
-	const entries: Array<{
-		slug: string;
-		title: string;
-		excerpt?: string | null;
-		publishedAt?: Date | null;
-		updatedAt?: Date | null;
-	}> = [];
-
-	let cursor: string | undefined;
-	for (let i = 0; i < 80; i++) {
-		const { entries: batch, nextCursor } = await getEmDashCollection(
-			collection,
-			{
-				status: "published",
-				limit: 100,
-				orderBy: { published_at: "desc" },
-				cursor,
-			},
-		);
-		for (const entry of batch) {
-			const slug = entry.id;
-			if (!slug || opts?.exclude?.has(slug)) continue;
-			const data = entry.data as {
-				title?: string;
-				excerpt?: string | null;
-				publishedAt?: Date | null;
-				updatedAt?: Date | null;
-			};
-			entries.push({
-				slug,
-				title: data.title || slug,
-				excerpt: data.excerpt ?? null,
-				publishedAt: data.publishedAt,
-				updatedAt: data.updatedAt,
-			});
-		}
-		if (!nextCursor || batch.length === 0) break;
-		cursor = nextCursor;
-	}
-
-	return entries;
+	return loadFeedEntries(env.DB, collection, opts);
 }
 
 export function lastmodOf(
-	entry: { publishedAt?: Date | null; updatedAt?: Date | null },
+	entry: { publishedAt?: Date | string | null; updatedAt?: Date | string | null },
 ): string | undefined {
 	return iso(entry.updatedAt) || iso(entry.publishedAt);
 }
