@@ -41,7 +41,8 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
 const [socialMenu, tags] = await Promise.all([
 	getMenu("social"),
-	getTaxonomyTerms("tag"),
+	// The footer renders links only; counting every tagged post adds D1 reads.
+	getTaxonomyTerms("tag", { includeCounts: false }),
 ]);
 
 // Primary nav points at real category terms + guides. Fake slugs 404.
