@@ -6,7 +6,8 @@ const [{ entries: recentPosts }, tags, socialMenu] = await Promise.all([
 		orderBy: { published_at: "desc" },
 		limit: 4,
 	}),
-	getTaxonomyTerms("tag"),
+	// The tag cloud does not display counts, so skip the aggregate query.
+	getTaxonomyTerms("tag", { includeCounts: false }),
 	getMenu("social"),
 ]);
 
