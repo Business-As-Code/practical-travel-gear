@@ -4,6 +4,13 @@
 	"account_id": "eddf7805053d5e32afd090c3ec22126c",
 	"main": "./src/worker.ts",
 	"workers_dev": false,
+	"cache": { "enabled": true, "cross_version_cache": false },
+	"placement": { "mode": "targeted", "region": "aws:us-west-2" },
+	"version_metadata": { "binding": "CF_VERSION_METADATA" },
+	"kv_namespaces": [
+		{ "binding": "SESSION", "id": "7a1de3ae7ccf4e608abb6c2a0c0ba09e" },
+		{ "binding": "CACHE", "id": "2ed1ecd31ea4457d8ad5b70715fc339a" }
+	],
 	"triggers": { "crons": ["*/5 * * * *"] },
 	"compatibility_date": "2026-03-29",
 	"compatibility_flags": [

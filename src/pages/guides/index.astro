@@ -4,8 +4,11 @@ import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
 
-const { entries: guides, cacheHint } = await getEmDashCollection("guides", {
+const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
+const { entries: guides, nextCursor, cacheHint } = await getEmDashCollection("guides", {
 	orderBy: { published_at: "desc" },
+	limit: 21,
+	cursor,
 });
 
 Astro.cache.set(cacheHint);
@@ -41,7 +44,7 @@ const guidesWithMeta = await Promise.all(
 				independently written.
 				{guides.length > 0 && (
 					<span class="count-note">
-						{" "}· {guides.length} {guides.length === 1 ? "guide" : "guides"} available
+						{" "}· {guides.length} {guides.length === 1 ? "guide" : "guides"} on this page
 					</span>
 				)}
 			</p>
@@ -70,11 +73,37 @@ const guidesWithMeta = await Promise.all(
 					))}
 				</div>
 			)}
+			{nextCursor && (
+				<div class="pagination"><a class="page-link" href={`/guides?cursor=${encodeURIComponent(nextCursor)}`}>More guides →</a></div>
+			)}
 		</div>
 	</section>
 </Base>
 
 <style>
+	.pagination {
+		display: flex;
+		justify-content: center;
+		padding: 48px 0 0;
+	}
+	.page-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 20px;
+		background: var(--ink);
+		color: var(--bg);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		border-radius: 999px;
+		text-decoration: none;
+		transition: background var(--transition-fast);
+	}
+	.page-link:hover { background: var(--accent); }
+
 	.archive-hero {
 		padding: 40px 0 28px;
 		border-bottom: 1px solid var(--rule);
