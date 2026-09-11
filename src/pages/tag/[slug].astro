@@ -1,20 +1,26 @@
 ---
-import { getTerm, getEmDashCollection, getEntryTerms } from "emdash";
+import { getEmDashCollection, getEntryTerms } from "emdash";
+import { getArchiveTerm } from "../../lib/archive-term";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
 
 const { slug } = Astro.params;
-const term = slug ? await getTerm("tag", slug) : null;
+const term = await getArchiveTerm("tag", slug);
+const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
 
 if (!term) {
 	return Astro.redirect("/404");
 }
 
-const { entries: posts } = await getEmDashCollection("posts", {
+const { entries: posts, nextCursor, cacheHint } = await getEmDashCollection("posts", {
+	limit: 21,
+	cursor,
 	where: { tag: term.slug },
 	orderBy: { published_at: "desc" },
 });
+
+Astro.cache.set(cacheHint);
 
 const filteredPosts = await Promise.all(
 	posts.map(async (post) => {
@@ -44,7 +50,7 @@ const filteredPosts = await Promise.all(
 			<h1 class="archive-title">#{term.label}</h1>
 			<p class="archive-count">
 				{filteredPosts.length}
-				{filteredPosts.length === 1 ? "story" : "stories"}
+				{filteredPosts.length === 1 ? "story" : "stories"} on this page
 			</p>
 		</div>
 	</section>
@@ -68,6 +74,9 @@ const filteredPosts = await Promise.all(
 						/>
 					))}
 				</div>
+			)}
+			{nextCursor && (
+				<p class="pagination"><a href={`/tag/${slug}?cursor=${encodeURIComponent(nextCursor)}`}>Older stories →</a></p>
 			)}
 		</div>
 	</section>
