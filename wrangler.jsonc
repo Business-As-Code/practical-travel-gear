@@ -4,6 +4,7 @@
 	"account_id": "eddf7805053d5e32afd090c3ec22126c",
 	"main": "./src/worker.ts",
 	"workers_dev": false,
+	"preview_urls": false,
 	"cache": { "enabled": true, "cross_version_cache": false },
 	"placement": { "mode": "targeted", "region": "aws:us-west-2" },
 	"version_metadata": { "binding": "CF_VERSION_METADATA" },

@@ -45,6 +45,8 @@ export default defineConfig({
 	integrations: [
 		react(),
 		emdash({
+			// Schema changes require a separately approved migration, never a Git build.
+			migrations: { runtime: "check" },
 			database: d1({ binding: "DB", session: "disabled" }),
 			storage: r2({ binding: "MEDIA" }),
 			plugins: staging ? [] : [

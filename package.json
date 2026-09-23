@@ -3,14 +3,16 @@
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
+	"engines": { "node": "24.18.0", "npm": ">=10.9.2 <12" },
+	"packageManager": "npm@10.9.2",
 	"workspaces": [
 		"packages/*"
 	],
 	"scripts": {
 		"dev": "astro dev",
-		"build": "astro build",
+		"build": "npm test && npm run typecheck && astro build",
 		"preview": "astro preview",
-		"deploy": "astro build && wrangler deploy",
+		"deploy": "npm run build && wrangler deploy",
 		"typecheck": "astro check",
 		"test": "node --test scripts/*.test.mjs"
 	},
