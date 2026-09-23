@@ -1,38 +1,25 @@
 ---
-import { getEmDashCollection, getEntryTerms } from "emdash";
 import { getArchiveTerm } from "../../lib/archive-term";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
-import { getReadingTime } from "../../utils/reading-time";
+import { rewriteNotFound } from "../../lib/not-found";
+import { listCards } from "../../lib/listing-cards";
 
 const { slug } = Astro.params;
 const term = await getArchiveTerm("category", slug);
-const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
+const rawPage = Number(Astro.url.searchParams.get("page") ?? "1");
+const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? Math.min(rawPage, 10000) : 1;
+Astro.cache.set({ maxAge: 300, tags: ["posts", "emdash:taxonomy:category"] });
 
 if (!term) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
-const { entries: posts, nextCursor, cacheHint } = await getEmDashCollection("posts", {
-	limit: 21,
-	cursor,
-	where: { category: term.slug },
-	orderBy: { published_at: "desc" },
+const { cards: posts, hasMore } = await listCards("posts", {
+	limit: 24,
+	offset: (page - 1) * 24,
+	term: { name: "category", slug: term.slug },
 });
-
-Astro.cache.set(cacheHint);
-
-const filteredPosts = await Promise.all(
-	posts.map(async (post) => {
-		const tags = await getEntryTerms("posts", post.data.id, "tag");
-		return {
-			post,
-			tags,
-			bylines: post.data.bylines ?? [],
-			readingTime: getReadingTime(post.data.content),
-		};
-	}),
-);
 ---
 
 <Base
@@ -49,35 +36,31 @@ const filteredPosts = await Promise.all(
 			<span class="archive-kicker">Category</span>
 			<h1 class="archive-title">{term.label}</h1>
 			<p class="archive-count">
-				{filteredPosts.length}
-				{filteredPosts.length === 1 ? "story" : "stories"} on this page
+				{posts.length}
+				{posts.length === 1 ? "story" : "stories"} on this page
 			</p>
 		</div>
 	</section>
 
 	<section class="archive-body">
 		<div class="container">
-			{filteredPosts.length === 0 ? (
+			{posts.length === 0 ? (
 				<p class="no-posts">No stories in this category yet.</p>
 			) : (
 				<div class="river">
-					{filteredPosts.map(({ post, tags, bylines, readingTime }) => (
+					{posts.map((post) => (
 						<PostCard
-							title={post.data.title}
-							excerpt={post.data.excerpt}
-							featuredImage={post.data.featured_image}
-							href={`/${post.id}`}
-							date={post.data.publishedAt ?? undefined}
-							readingTime={readingTime}
-							tags={tags.map((t) => ({ slug: t.slug, label: t.label }))}
-							bylines={bylines}
+							title={post.title}
+							excerpt={post.excerpt ?? undefined}
+							featuredImage={post.featuredImage}
+							href={post.href}
+							date={post.publishedAt ?? undefined}
+							author={post.authorName}
 						/>
 					))}
 				</div>
 			)}
-			{nextCursor && (
-				<p class="pagination"><a href={`/category/${slug}?cursor=${encodeURIComponent(nextCursor)}`}>Older stories →</a></p>
-			)}
+			{hasMore && <p class="pagination"><a href={`/category/${slug}?page=${page + 1}`}>Older stories →</a></p>}
 		</div>
 	</section>
 </Base>

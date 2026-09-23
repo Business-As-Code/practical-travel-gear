@@ -7,6 +7,13 @@ import { loadFeedEntries } from '../src/lib/feed-entries.ts';
 const req = (path = '/', init) => new Request(`https://practicaltravelgear.com${path}`, init);
 const html = (headers = {}, status = 200) => new Response('body', { status, headers: { 'content-type': 'text/html', ...headers } });
 
+test('native public variants separate Cookie and Authorization before Worker dispatch', () => {
+  const result = applyCachePolicy(req('/'), html());
+  const vary = (result.headers.get('vary') ?? '').toLowerCase().split(',').map(s => s.trim());
+  assert.ok(vary.includes('cookie'));
+  assert.ok(vary.includes('authorization'));
+});
+
 test('public responses use native cache with CMS invalidation tags', () => {
   const result = applyCachePolicy(req('/article'), html({ 'cache-tag': 'article-id,astro-version:123' }));
   assert.equal(result.headers.get('cloudflare-cdn-cache-control'), 'public, max-age=3600');
@@ -32,6 +39,19 @@ test('feeds receive invalidation tags and public media keeps its explicit policy
   for (const path of ['/llms.txt', '/sitemap-posts.xml', '/sitemap-pages.xml', '/sitemap-guides.xml', '/robots.txt']) assert.equal(cachePolicy(req(path)).maxAge, 3600);
   const media = applyCachePolicy(req('/_image'), new Response('image', { headers: { 'content-type': 'image/webp', 'cache-control': 'public, max-age=31536000, immutable' } }));
   assert.equal(media.headers.get('cache-control'), 'public, max-age=31536000, immutable');
+  assert.match(media.headers.get('vary') ?? '', /Cookie/);
+  assert.match(media.headers.get('vary') ?? '', /Authorization/);
+});
+
+test('page sitemaps work with the core pages schema without excerpt', async () => {
+  const sqlite = new DatabaseSync(':memory:');
+  sqlite.exec("CREATE TABLE ec_pages (id TEXT, slug TEXT, title TEXT, published_at TEXT, updated_at TEXT, status TEXT, deleted_at TEXT); INSERT INTO ec_pages VALUES ('1','about','About',NULL,NULL,'published',NULL)");
+  const db = { prepare(sql) { return { bind(...args) { return { async all() { return { results: sqlite.prepare(sql).all(...args) }; } }; } }; } };
+  try {
+    const entries = await loadFeedEntries(db, 'pages');
+    assert.equal(entries[0].slug, 'about');
+    assert.equal(entries[0].excerpt, null);
+  } finally { sqlite.close(); }
 });
 
 function feedFixture() {

@@ -1,0 +1,141 @@
+---
+import Base from "../../layouts/Base.astro";
+import { loadAuthors } from "../../utils/authors";
+
+Astro.cache.set({ maxAge: 300, tags: ["posts", "guides", "emdash:bylines"] });
+const authors = await loadAuthors();
+const featured = authors.filter((a) => a.featured);
+const rest = authors.filter((a) => !a.featured);
+---
+
+<Base
+	title="Authors"
+	description="The writers behind Practical Travel Gear."
+	canonical="https://practicaltravelgear.com/authors"
+>
+	<section class="archive-hero">
+		<div class="container">
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href="/">Home</a>
+				<span class="sep">/</span>
+				<span>Authors</span>
+			</nav>
+			<h1 class="archive-title">Authors</h1>
+			<p class="dek">
+				The people who write the reviews and guides. Current contributors first.
+			</p>
+		</div>
+	</section>
+
+	<section class="archive-body">
+		<div class="container">
+			{featured.length > 0 && (
+				<ul class="grid">
+					{featured.map((a) => (
+						<li>
+							<a class="card" href={`/authors/${a.slug}`}>
+								<img src={a.avatar} alt="" class="avatar" />
+								<div>
+									<strong>{a.name}</strong>
+									{a.bio && <p>{a.bio}</p>}
+								</div>
+							</a>
+						</li>
+					))}
+				</ul>
+			)}
+
+			{rest.length > 0 && (
+				<>
+					<h2 class="subhead">Contributors</h2>
+					<ul class="grid compact">
+						{rest.map((a) => (
+							<li>
+								<a class="card" href={`/authors/${a.slug}`}>
+									<img src={a.avatar} alt="" class="avatar" />
+									<div>
+										<strong>{a.name}</strong>
+										{a.bio && <p>{a.bio}</p>}
+									</div>
+								</a>
+							</li>
+						))}
+					</ul>
+				</>
+			)}
+		</div>
+	</section>
+</Base>
+
+<style>
+	.archive-hero {
+		padding: 40px 0 28px;
+		border-bottom: 1px solid var(--rule, #ddd);
+	}
+	.container {
+		max-width: var(--max-width, 1100px);
+		margin: 0 auto;
+		padding: 0 var(--spacing-6, 24px);
+	}
+	.breadcrumb {
+		font-size: 13px;
+		margin-bottom: 16px;
+		color: var(--ink-3, #666);
+	}
+	.breadcrumb a {
+		color: inherit;
+	}
+	.sep {
+		margin: 0 8px;
+	}
+	.archive-title {
+		font-size: clamp(32px, 4vw, 48px);
+		margin: 0 0 12px;
+	}
+	.dek {
+		max-width: 640px;
+		color: var(--ink-2, #444);
+		margin: 0;
+	}
+	.archive-body {
+		padding: 40px 0 64px;
+	}
+	.subhead {
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin: 40px 0 16px;
+	}
+	.grid {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 20px;
+	}
+	.card {
+		display: flex;
+		gap: 16px;
+		text-decoration: none;
+		color: inherit;
+		padding: 16px 0;
+		border-bottom: 1px solid var(--rule, #eee);
+	}
+	.avatar {
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		object-fit: cover;
+		flex-shrink: 0;
+	}
+	.card strong {
+		display: block;
+		margin-bottom: 6px;
+	}
+	.card p {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.45;
+		color: var(--ink-2, #444);
+	}
+</style>

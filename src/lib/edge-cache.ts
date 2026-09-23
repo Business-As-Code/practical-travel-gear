@@ -29,6 +29,7 @@ export function applyCachePolicy(request: Request, response: Response): Response
 		// Preserve explicit caching for public image/media responses only.
 		const publicMedia = request.method === "GET" && !request.headers.has("authorization") &&
 			!PRIVATE_COOKIES.test(request.headers.get("cookie") ?? "") && !privateResponse && /^(?:image|audio|video)\//.test(type) && /\bpublic\b/i.test(control);
+		if (publicMedia) result.headers.append("Vary", "Cookie, Authorization");
 		if (!publicMedia) {
 			result.headers.set("Cloudflare-CDN-Cache-Control", "no-store");
 			result.headers.set("Cache-Control", "private, no-store");
@@ -44,7 +45,10 @@ export function applyCachePolicy(request: Request, response: Response): Response
 	const tags = new Set((result.headers.get("Cache-Tag") ?? "").split(",").filter(Boolean));
 	for (const tag of CONTENT_TAGS) tags.add(tag);
 	result.headers.set("Cache-Tag", [...tags].join(","));
-	result.headers.set("X-PTG-Cache-Version", "3");
+	// Native cache hits run before fetch/middleware. Public responses MUST
+	// key these headers too; no-store on private requests alone is too late.
+	result.headers.append("Vary", "Cookie, Authorization");
+	result.headers.set("X-PTG-Cache-Version", "4");
 	return result;
 }
 

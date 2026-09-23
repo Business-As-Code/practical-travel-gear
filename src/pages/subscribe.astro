@@ -1,0 +1,48 @@
+---
+export const prerender = false;
+
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+	title="Subscribe"
+	description="No email list. The RSS feed is how you follow Practical Travel Gear."
+	canonical="https://practicaltravelgear.com/subscribe"
+>
+	<section class="subscribe-page">
+		<h1>Subscribe</h1>
+		<p>There is no email list.</p>
+		<p>
+			The RSS feed is how you follow Practical Travel Gear. New reviews and
+			guides land there. No signup, no spam, no form that pretends to work.
+		</p>
+		<p>
+			<a href="/rss.xml">RSS feed</a>
+			&nbsp;·&nbsp;
+			<a href="/contact">Contact the desk</a>
+		</p>
+	</section>
+</Base>
+
+<style>
+	.subscribe-page {
+		max-width: 40rem;
+		margin: 0 auto;
+		padding: 3rem 1.25rem 4rem;
+	}
+	.subscribe-page h1 {
+		font-size: 2rem;
+		letter-spacing: -0.02em;
+		margin: 0 0 1rem;
+	}
+	.subscribe-page p {
+		font-size: 1.05rem;
+		line-height: 1.55;
+		color: var(--ink-2, #333);
+		margin: 0 0 1rem;
+	}
+	.subscribe-page a {
+		color: var(--accent, #c45c26);
+		font-weight: 600;
+	}
+</style>

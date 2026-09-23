@@ -1,9 +1,10 @@
 import { defineMiddleware } from "astro:middleware";
+import { legacyRedirect } from "./lib/wp-legacy";
 import { wpRedirects } from "./data/wp-redirects";
 
 // Cache hits return before Astro in the Worker entry point. Scheduled
 // publishing runs on the existing five-minute Cron, never on visitor reads.
 export const onRequest = defineMiddleware(async (context, next) => {
-	const destination = wpRedirects[context.url.pathname];
+	const destination = wpRedirects[context.url.pathname] ?? wpRedirects[context.url.pathname.replace(/\/$/, "")] ?? legacyRedirect(context.url.pathname);
 	return destination ? context.redirect(destination, 301) : next();
 });

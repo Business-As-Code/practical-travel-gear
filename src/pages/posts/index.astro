@@ -1,33 +1,16 @@
 ---
-import { getEmDashCollection, getEntryTerms } from "emdash";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
-import { getReadingTime } from "../../utils/reading-time";
+import { listCards } from "../../lib/listing-cards";
 
-const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
-
-const { entries: posts, nextCursor, cacheHint } = await getEmDashCollection(
-	"posts",
-	{
-		limit: 21,
-		cursor,
-		orderBy: { published_at: "desc" },
-	},
-);
-
-Astro.cache.set(cacheHint);
-
-const postsWithMeta = await Promise.all(
-	posts.map(async (post) => {
-		const tags = await getEntryTerms("posts", post.data.id, "tag");
-		return {
-			post,
-			tags,
-			bylines: post.data.bylines ?? [],
-			readingTime: getReadingTime(post.data.content),
-		};
-	}),
-);
+const rawPage = Number(Astro.url.searchParams.get("page") ?? "1");
+const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? Math.min(rawPage, 10000) : 1;
+Astro.cache.set({ maxAge: 300, tags: ["posts"] });
+const perPage = 21;
+const { cards: posts, hasMore } = await listCards("posts", {
+	limit: perPage,
+	offset: (page - 1) * perPage,
+});
 ---
 
 <Base
@@ -56,24 +39,22 @@ const postsWithMeta = await Promise.all(
 				<p class="no-posts">No posts yet.</p>
 			) : (
 				<div class="river">
-					{postsWithMeta.map(({ post, tags, bylines, readingTime }) => (
+					{posts.map((post) => (
 						<PostCard
-							title={post.data.title ?? "Untitled"}
-							excerpt={post.data.excerpt}
-							featuredImage={post.data.featured_image}
-							href={`/${post.id}`}
-							date={post.data.publishedAt ?? undefined}
-							readingTime={readingTime}
-							tags={tags.map((t) => ({ slug: t.slug, label: t.label }))}
-							bylines={bylines}
+							title={post.title}
+							excerpt={post.excerpt ?? undefined}
+							featuredImage={post.featuredImage}
+							href={post.href}
+							date={post.publishedAt ?? undefined}
+							author={post.authorName}
 						/>
 					))}
 				</div>
 			)}
 
-			{nextCursor && (
+			{hasMore && (
 				<div class="pagination">
-					<a href={`/posts?cursor=${nextCursor}`} class="page-link">
+					<a href={`/posts?page=${page + 1}`} class="page-link">
 						Older stories →
 					</a>
 				</div>

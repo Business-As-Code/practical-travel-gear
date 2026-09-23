@@ -8,8 +8,7 @@
 	"placement": { "mode": "targeted", "region": "aws:us-west-2" },
 	"version_metadata": { "binding": "CF_VERSION_METADATA" },
 	"kv_namespaces": [
-		{ "binding": "SESSION", "id": "7a1de3ae7ccf4e608abb6c2a0c0ba09e" },
-		{ "binding": "CACHE", "id": "2ed1ecd31ea4457d8ad5b70715fc339a" }
+		{ "binding": "SESSION", "id": "7a1de3ae7ccf4e608abb6c2a0c0ba09e" }
 	],
 	"triggers": { "crons": ["*/5 * * * *"] },
 	"compatibility_date": "2026-03-29",
@@ -26,6 +25,7 @@
 			// Run `wrangler d1 create my-emdash-site` and paste the ID here
 		},
 	],
+	"images": { "binding": "IMAGES" },
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",

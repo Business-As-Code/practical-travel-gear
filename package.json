@@ -12,18 +12,18 @@
 		"preview": "astro preview",
 		"deploy": "astro build && wrangler deploy",
 		"typecheck": "astro check",
-		"test": "node --test scripts/hosting-costs.test.mjs"
+		"test": "node --test scripts/*.test.mjs"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^14.3.1",
 		"@astrojs/react": "^6.0.5",
-		"@emdash-cms/cloudflare": "^0.37.0",
-		"@emdash-cms/plugin-forms": "^0.2.6",
-		"@emdash-cms/plugin-webhook-notifier": "^0.2.0",
+		"@emdash-cms/cloudflare": "0.38.0",
+		"@emdash-cms/plugin-forms": "0.2.6",
+		"@emdash-cms/plugin-webhook-notifier": "0.2.0",
 		"@tiptap/extension-collaboration": "^3.22.3",
 		"@tiptap/y-tiptap": "^3.0.3",
 		"astro": "^7.3.2",
-		"emdash": "^0.37.0",
+		"emdash": "0.38.0",
 		"plugin-agentmail": "*",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",

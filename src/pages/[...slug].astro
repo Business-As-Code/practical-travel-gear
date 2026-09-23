@@ -7,18 +7,23 @@
  * to the appropriate handler without changing the URL.
  */
 import { getEmDashEntry } from "emdash";
+import { rewriteNotFound } from "../lib/not-found";
 
 const slugSegments = Astro.params.slug;
 if (!slugSegments) {
-	return Astro.redirect("/404");
+	return rewriteNotFound(Astro);
 }
 
-// For multi-segment paths like /2024/05/my-post (date-based WP URLs),
-// extract the last segment as the slug and 301 redirect to the canonical URL.
+// Date-based WP permalinks only: /2016/my-post or /2016/05/my-post.
+// Do not strip /page/, /author/, /feed/ — those are leftover WP prefixes.
 const segments = slugSegments.split("/").filter(Boolean);
 if (segments.length > 1) {
-	const lastSegment = segments[segments.length - 1];
-	return Astro.redirect(`/${lastSegment}`, 301);
+	const year = /^\d{4}$/.test(segments[0]);
+	const month = segments.length === 3 && /^\d{1,2}$/.test(segments[1]);
+	if (year && (segments.length === 2 || month)) {
+		return Astro.redirect(`/${segments[segments.length - 1]}`, 301);
+	}
+	return rewriteNotFound(Astro);
 }
 
 const slug = segments[0];
@@ -51,5 +56,5 @@ if (pageResult.entry) {
 	return rewriteTo(`/pages/${slug}`);
 }
 
-return Astro.redirect("/404");
+return rewriteNotFound(Astro);
 ---

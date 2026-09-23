@@ -1,18 +1,20 @@
 import cloudflare from "@astrojs/cloudflare";
 import { cacheCloudflare } from "@astrojs/cloudflare/cache";
 import react from "@astrojs/react";
-import { d1, r2, sandbox, kvCache } from "@emdash-cms/cloudflare";
+import { d1, r2, sandbox } from "@emdash-cms/cloudflare";
 import { formsPlugin } from "@emdash-cms/plugin-forms";
 import webhookNotifier from "@emdash-cms/plugin-webhook-notifier";
 import { agentMailPlugin } from "plugin-agentmail";
 import { defineConfig } from "astro/config";
 import emdash from "emdash/astro";
 
+const staging = process.env.PTG_STAGING === "1";
 export default defineConfig({
-	site: "https://practicaltravelgear.com",
+	vite: { define: { 'import.meta.env.PTG_STAGING': JSON.stringify(staging) } },
+	site: staging ? "https://ptg-emdash-stage-20260921.odd-hill-1be0.workers.dev" : "https://practicaltravelgear.com",
 	output: "server",
-	adapter: cloudflare(),
-	cache: { provider: cacheCloudflare() },
+	adapter: cloudflare(staging ? { configPath: "wrangler.stage.json" } : {}),
+	cache: { provider: { ...cacheCloudflare(), entrypoint: new URL('./src/lib/native-cache-provider.ts', import.meta.url).pathname } },
 	routeRules: {
 		"/*": { maxAge: 3600 },
 		"/": { maxAge: 300 },
@@ -44,13 +46,12 @@ export default defineConfig({
 		react(),
 		emdash({
 			database: d1({ binding: "DB", session: "disabled" }),
-			objectCache: kvCache({ binding: "CACHE" }),
 			storage: r2({ binding: "MEDIA" }),
-			plugins: [
+			plugins: staging ? [] : [
 				formsPlugin(),
 				agentMailPlugin(),
 			],
-			sandboxed: [webhookNotifier],
+			sandboxed: staging ? [] : [webhookNotifier],
 			sandboxRunner: sandbox(),
 			marketplace: "https://marketplace.emdashcms.com",
 		}),

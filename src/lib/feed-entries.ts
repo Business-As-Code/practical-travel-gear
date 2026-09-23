@@ -35,7 +35,7 @@ export async function loadFeedEntries(
 		values.push(size);
 		// Feeds need metadata only, not article bodies, images, bylines or tags.
 		const { results } = await db.prepare(`
-			SELECT id, slug, title, excerpt, published_at, updated_at
+			SELECT id, slug, title, ${collection === "pages" ? "NULL AS excerpt" : "excerpt"}, published_at, updated_at
 			FROM ${TABLES[collection]}
 			WHERE status = 'published' AND deleted_at IS NULL ${after}
 			ORDER BY published_at DESC, id DESC LIMIT ?

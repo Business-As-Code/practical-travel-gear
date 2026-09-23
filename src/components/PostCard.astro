@@ -1,16 +1,18 @@
 ---
-import type { MediaValue, ContentBylineCredit } from "emdash";
-import { Image } from "emdash/ui";
+import type { ContentBylineCredit } from "emdash";
+import ResponsiveImage from "./ResponsiveImage.astro";
 
 interface Props {
 	title: string;
 	excerpt?: string;
-	featuredImage?: MediaValue | string;
+	featuredImage?: unknown;
 	href: string;
 	date?: Date;
 	readingTime?: number;
 	tags?: Array<{ slug: string; label: string }>;
 	bylines?: ContentBylineCredit[];
+	/** Prefer this over hydrating full byline objects on listing pages. */
+	author?: string | null;
 	/** Shown as the orange category chip above the title */
 	kicker?: string;
 	/** Optional badge rendered on the image (top-left) */
@@ -28,6 +30,7 @@ const {
 	readingTime,
 	tags,
 	bylines,
+	author,
 	kicker,
 	badge,
 	variant = "default",
@@ -42,7 +45,8 @@ const formattedDate = date
 	: null;
 
 const authorName =
-	bylines && bylines.length > 0 ? bylines[0].byline.displayName : null;
+	author ||
+	(bylines && bylines.length > 0 ? bylines[0].byline.displayName : null);
 
 const chip = kicker ?? (tags && tags.length > 0 ? tags[0].label : null);
 ---
@@ -51,7 +55,7 @@ const chip = kicker ?? (tags && tags.length > 0 ? tags[0].label : null);
 	<a href={href} class="story-inner">
 		{featuredImage && (
 			<div class="pic">
-				<Image image={featuredImage} />
+				<ResponsiveImage image={featuredImage} />
 				{badge && <span class="badge accent">{badge}</span>}
 			</div>
 		)}

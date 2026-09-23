@@ -1,0 +1,24 @@
+import { Kysely } from 'kysely';
+import { createDialect } from 'emdash/db/sqlite';
+import { runMigrations } from '../.wrangler/emdash-034/package/dist/db/index.mjs';
+import { createDirectMigrationExecutor, getCoreMigrationIdentity } from 'emdash/migrations';
+import { DatabaseSync } from 'node:sqlite';
+import { writeFile } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const file='.wrangler/stage-upgrade-034.sqlite';
+const db=new Kysely({dialect:createDialect({url:file})});
+const before=await runMigrations(db);await db.destroy();
+let sqlite=new DatabaseSync(file);
+sqlite.exec("INSERT INTO options(name,value) VALUES('stage-upgrade-sentinel','synthetic-only')");
+const oldNames=sqlite.prepare('SELECT name FROM _emdash_migrations ORDER BY name').all().map(r=>r.name);sqlite.close();
+const identity=await getCoreMigrationIdentity();
+const executor=createDirectMigrationExecutor({target:{kind:'sqlite',label:'synthetic-034-upgrade',fingerprint:file},createDialect:()=>createDialect({url:file})});
+let after;
+try {after=await executor.execute({action:'apply',i18n:null,artifact:{emdashVersion:identity.emdashVersion,migrationSetFingerprint:identity.fingerprint}});}finally{await executor.dispose?.();}
+sqlite=new DatabaseSync(file);
+assert.equal(sqlite.prepare("SELECT value FROM options WHERE name='stage-upgrade-sentinel'").get().value,'synthetic-only');
+assert.ok(sqlite.prepare('PRAGMA table_info(options)').all().some(r=>r.name==='revision'));
+assert.equal(after.pending.length,0);assert.equal(after.unknownApplied.length,0);sqlite.close();
+const report={from:'0.34.0',to:identity.emdashVersion,oldNames,applied034:before.applied,upgrade:after,sentinelRetained:true,scope:'local disposable SQLite; not a production snapshot and not remote D1 upgrade'};
+await writeFile('.wrangler/stage-upgrade-results.json',JSON.stringify(report,null,2));
+console.log(JSON.stringify({oldCount:oldNames.length,upgradeExecuted:after.executed,sentinelRetained:true}));

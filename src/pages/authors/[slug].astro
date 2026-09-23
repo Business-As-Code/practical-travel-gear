@@ -1,0 +1,159 @@
+---
+import { getEntriesByByline, getBylineBySlug } from "emdash";
+import Base from "../../layouts/Base.astro";
+import { rewriteNotFound } from "../../lib/not-found";
+import { loadAuthor } from "../../utils/authors";
+
+Astro.cache.set({ maxAge: 300, tags: ["posts", "guides", "emdash:bylines"] });
+const slug = Astro.params.slug;
+if (!slug) {
+	return rewriteNotFound(Astro);
+}
+
+const author = await loadAuthor(slug);
+if (!author) {
+	return rewriteNotFound(Astro);
+}
+
+const byline = await getBylineBySlug(slug);
+const posts = byline
+	? await getEntriesByByline("posts", byline.translationGroup ?? byline.id, {
+			status: "published",
+			limit: 12,
+			orderBy: { published_at: "desc" },
+		})
+	: [];
+const guides = byline
+	? await getEntriesByByline("guides", byline.translationGroup ?? byline.id, {
+			status: "published",
+			limit: 8,
+			orderBy: { published_at: "desc" },
+		})
+	: [];
+---
+
+<Base
+	title={author.name}
+	description={author.bio ?? `Writing by ${author.name} on Practical Travel Gear.`}
+	canonical={`https://practicaltravelgear.com/authors/${author.slug}`}
+>
+	<section class="archive-hero">
+		<div class="container">
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href="/">Home</a>
+				<span class="sep">/</span>
+				<a href="/authors">Authors</a>
+				<span class="sep">/</span>
+				<span>{author.name}</span>
+			</nav>
+			<div class="head">
+				<img src={author.avatar} alt="" class="avatar" />
+				<div>
+					<h1>{author.name}</h1>
+					{author.bio && <p class="dek">{author.bio}</p>}
+					{author.websiteUrl && (
+						<p class="site">
+							<a href={author.websiteUrl}>{author.websiteUrl.replace(/^https?:\/\//, "")}</a>
+						</p>
+					)}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="archive-body">
+		<div class="container">
+			{guides.length > 0 && (
+				<>
+					<h2>Guides</h2>
+					<ul>
+						{guides.map((g) => (
+							<li>
+								<a href={`/guides/${g.id}`}>{(g.data.title as string) || g.id}</a>
+							</li>
+						))}
+					</ul>
+				</>
+			)}
+			{posts.length > 0 && (
+				<>
+					<h2>Stories</h2>
+					<ul>
+						{posts.map((p) => (
+							<li>
+								<a href={`/${p.id}`}>{(p.data.title as string) || p.id}</a>
+							</li>
+						))}
+					</ul>
+				</>
+			)}
+			{posts.length === 0 && guides.length === 0 && (
+				<p>No published pieces listed under this name yet.</p>
+			)}
+		</div>
+	</section>
+</Base>
+
+<style>
+	.archive-hero {
+		padding: 40px 0 28px;
+		border-bottom: 1px solid var(--rule, #ddd);
+	}
+	.container {
+		max-width: var(--max-width, 1100px);
+		margin: 0 auto;
+		padding: 0 var(--spacing-6, 24px);
+	}
+	.breadcrumb {
+		font-size: 13px;
+		margin-bottom: 20px;
+		color: var(--ink-3, #666);
+	}
+	.breadcrumb a {
+		color: inherit;
+	}
+	.sep {
+		margin: 0 8px;
+	}
+	.head {
+		display: flex;
+		gap: 20px;
+		align-items: flex-start;
+	}
+	.avatar {
+		width: 88px;
+		height: 88px;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+	h1 {
+		margin: 0 0 10px;
+		font-size: clamp(28px, 4vw, 40px);
+	}
+	.dek {
+		max-width: 640px;
+		line-height: 1.5;
+		margin: 0 0 8px;
+	}
+	.archive-body {
+		padding: 36px 0 64px;
+	}
+	h2 {
+		font-size: 14px;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin: 0 0 12px;
+	}
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 32px;
+	}
+	li {
+		padding: 10px 0;
+		border-bottom: 1px solid var(--rule, #eee);
+	}
+	a {
+		color: inherit;
+	}
+</style>

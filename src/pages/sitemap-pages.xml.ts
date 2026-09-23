@@ -14,6 +14,8 @@ export const GET: APIRoute = async () => {
 		{ loc: siteUrl("/"), lastmod: undefined },
 		{ loc: siteUrl("/posts") },
 		{ loc: siteUrl("/guides") },
+		{ loc: siteUrl("/authors") },
+		{ loc: siteUrl("/subscribe") },
 		...pages.map((page) => ({
 			loc: siteUrl(`/${page.slug}`),
 			lastmod: lastmodOf(page),

@@ -1,0 +1,46 @@
+---
+import {
+	CARD_WIDTHS,
+	HERO_WIDTHS,
+	resolveMedia,
+	srcsetFor,
+	transformSrc,
+} from "../lib/responsive-image";
+
+interface Props {
+	image: unknown;
+	alt?: string;
+	priority?: boolean;
+	sizes?: string;
+	class?: string;
+	/** Wider srcset for the page hero. */
+	hero?: boolean;
+}
+
+const { image, alt, priority = false, class: className, hero = false } = Astro.props;
+const media = resolveMedia(image);
+const widths = hero ? HERO_WIDTHS : CARD_WIDTHS;
+const src = media ? transformSrc(media.src, hero ? 1280 : 960) : "";
+const srcset = media ? srcsetFor(media.src, widths) : "";
+const sizes =
+	Astro.props.sizes ??
+	(hero ? "(min-width: 900px) 70vw, 100vw" : "(min-width: 900px) 30vw, 92vw");
+const finalAlt = alt ?? media?.alt ?? "";
+---
+
+{
+	media && (
+		<img
+			src={src}
+			srcset={srcset}
+			sizes={sizes}
+			alt={finalAlt}
+			width={media.width}
+			height={media.height}
+			loading={priority ? "eager" : "lazy"}
+			fetchpriority={priority ? "high" : undefined}
+			decoding="async"
+			class={className}
+		/>
+	)
+}

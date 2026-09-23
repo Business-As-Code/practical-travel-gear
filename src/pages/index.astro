@@ -1,55 +1,20 @@
 ---
-import { getEmDashCollection, getEntryTerms } from "emdash";
-import { Image } from "emdash/ui";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
-import { getReadingTime } from "../utils/reading-time";
+import ResponsiveImage from "../components/ResponsiveImage.astro";
+import { listCards } from "../lib/listing-cards";
 
-const [
-	{ entries: posts, cacheHint },
-	{ entries: guides },
-] = await Promise.all([
-	getEmDashCollection("posts", {
-		limit: 12,
-		orderBy: { published_at: "desc" },
-	}),
-	getEmDashCollection("guides", {
-		limit: 3,
-		orderBy: { published_at: "desc" },
-	}),
+const [{ cards: posts }, { cards: guides }] = await Promise.all([
+	listCards("posts", { limit: 12 }),
+	listCards("guides", { limit: 3 }),
 ]);
 
-Astro.cache.set(cacheHint);
+Astro.cache.set({ maxAge: 300, tags: ["posts", "guides"] });
 
-// Fetch tags for all posts in parallel to avoid waterfall.
-const postsWithTags = await Promise.all(
-	posts.map(async (post) => {
-		const tags = await getEntryTerms("posts", post.data.id, "tag");
-		return {
-			post,
-			tags: tags.map((t) => ({ slug: t.slug, label: t.label })),
-			bylines: post.data.bylines ?? [],
-			readingTime: getReadingTime(post.data.content),
-		};
-	}),
-);
-
-const guidesWithMeta = await Promise.all(
-	guides.map(async (guide) => {
-		const tags = await getEntryTerms("guides", guide.data.id, "tag");
-		return {
-			guide,
-			tags,
-			readingTime: getReadingTime(guide.data.content),
-		};
-	}),
-);
-
-// Split posts into layout regions
-const heroLead = postsWithTags[0];
-const heroStack = postsWithTags.slice(1, 4);
-const featureStory = postsWithTags[4];
-const riverPosts = postsWithTags.slice(5, 9);
+const heroLead = posts[0];
+const heroStack = posts.slice(1, 4);
+const featureStory = posts[4];
+const riverPosts = posts.slice(5, 9);
 
 function fmtDate(d: Date | null | undefined) {
 	return d
@@ -74,54 +39,44 @@ function fmtDate(d: Date | null | undefined) {
 		<section class="hero">
 			<div class="container">
 				<div class="hero-grid">
-					<a class="hero-lead" href={`/${heroLead.post.id}`}>
+					<a class="hero-lead" href={heroLead.href}>
 						<div class="hero-lead-pic">
-							{heroLead.post.data.featured_image && (
-								<Image image={heroLead.post.data.featured_image} />
+							{heroLead.featuredImage && (
+								<ResponsiveImage image={heroLead.featuredImage} hero priority sizes="(min-width: 900px) 62vw, 100vw" />
 							)}
 						</div>
 						<div class="overlay">
-							{heroLead.tags[0] && (
-								<span class="cat">Featured · {heroLead.tags[0].label}</span>
-							)}
-							<h2 class="hero-title">{heroLead.post.data.title}</h2>
-							{heroLead.post.data.excerpt && (
-								<p class="dek">{heroLead.post.data.excerpt}</p>
+							<h2 class="hero-title">{heroLead.title}</h2>
+							{heroLead.excerpt && (
+								<p class="dek">{heroLead.excerpt}</p>
 							)}
 							<div class="meta">
-								{heroLead.bylines[0] && (
+								{heroLead.authorName && (
 									<span>
-										By <strong>{heroLead.bylines[0].byline.displayName}</strong>
+										By <strong>{heroLead.authorName}</strong>
 									</span>
 								)}
-								{heroLead.post.data.publishedAt && (
-									<span>{fmtDate(heroLead.post.data.publishedAt)}</span>
-								)}
-								{heroLead.readingTime && (
-									<span>{heroLead.readingTime} min read</span>
+								{heroLead.publishedAt && (
+									<span>{fmtDate(heroLead.publishedAt)}</span>
 								)}
 							</div>
 						</div>
 					</a>
 
 					<div class="hero-stack">
-						{heroStack.map(({ post, tags, bylines, readingTime }) => (
-							<a class="hero-stack-item" href={`/${post.id}`}>
+						{heroStack.map((post) => (
+							<a class="hero-stack-item" href={post.href}>
 								<div class="pic">
-									{post.data.featured_image && (
-										<Image image={post.data.featured_image} />
+									{post.featuredImage && (
+										<ResponsiveImage image={post.featuredImage} sizes="(min-width: 900px) 280px, 92vw" />
 									)}
 								</div>
 								<div>
-									{tags[0] && (
-										<span class="cat-chip">{tags[0].label}</span>
-									)}
-									<h3>{post.data.title}</h3>
+									<h3>{post.title}</h3>
 									<div class="meta">
-										{bylines[0]?.byline.displayName}
-										{bylines[0] && post.data.publishedAt && " · "}
-										{fmtDate(post.data.publishedAt)}
-										{readingTime && ` · ${readingTime} min`}
+										{post.authorName}
+										{post.authorName && post.publishedAt && " · "}
+										{fmtDate(post.publishedAt)}
 									</div>
 								</div>
 							</a>
@@ -177,44 +132,39 @@ function fmtDate(d: Date | null | undefined) {
 				</div>
 
 				<div class="feature-row">
-					<a class="story feature-story" href={`/${featureStory.post.id}`}>
+					<a class="story feature-story" href={featureStory.href}>
 						<div class="pic">
-							{featureStory.post.data.featured_image && (
-								<Image image={featureStory.post.data.featured_image} />
+							{featureStory.featuredImage && (
+								<ResponsiveImage image={featureStory.featuredImage} sizes="(min-width: 900px) 55vw, 92vw" />
 							)}
 						</div>
-						{featureStory.tags[0] && (
-							<span class="cat-chip">{featureStory.tags[0].label}</span>
-						)}
-						<h3>{featureStory.post.data.title}</h3>
-						{featureStory.post.data.excerpt && (
-							<p class="excerpt">{featureStory.post.data.excerpt}</p>
+						<h3>{featureStory.title}</h3>
+						{featureStory.excerpt && (
+							<p class="excerpt">{featureStory.excerpt}</p>
 						)}
 						<div class="meta">
-							{featureStory.bylines[0] && (
+							{featureStory.authorName && (
 								<span>
-									By <strong>{featureStory.bylines[0].byline.displayName}</strong>
+									By <strong>{featureStory.authorName}</strong>
 								</span>
 							)}
-							{featureStory.post.data.publishedAt && (
-								<span>{fmtDate(featureStory.post.data.publishedAt)}</span>
+							{featureStory.publishedAt && (
+								<span>{fmtDate(featureStory.publishedAt)}</span>
 							)}
-							{featureStory.readingTime && <span>{featureStory.readingTime} min</span>}
 						</div>
 					</a>
 
 					<div class="more-from-section">
 						<h4 class="more-head">More from this week</h4>
 						<ul class="more-list">
-							{riverPosts.slice(0, 5).map(({ post, bylines, readingTime }) => (
+							{riverPosts.slice(0, 5).map((post) => (
 								<li>
-									<a class="more-link" href={`/${post.id}`}>
-										<h5>{post.data.title}</h5>
+									<a class="more-link" href={post.href}>
+										<h5>{post.title}</h5>
 										<div class="more-meta">
-											{bylines[0]?.byline.displayName}
-											{bylines[0] && post.data.publishedAt && " · "}
-											{fmtDate(post.data.publishedAt)}
-											{readingTime && ` · ${readingTime} min`}
+											{post.authorName}
+											{post.authorName && post.publishedAt && " · "}
+											{fmtDate(post.publishedAt)}
 										</div>
 									</a>
 								</li>
@@ -225,16 +175,14 @@ function fmtDate(d: Date | null | undefined) {
 
 				{riverPosts.length > 0 && (
 					<div class="river">
-						{riverPosts.map(({ post, tags, bylines, readingTime }) => (
+						{riverPosts.map((post) => (
 							<PostCard
-								title={post.data.title ?? "Untitled"}
-								excerpt={post.data.excerpt}
-								featuredImage={post.data.featured_image}
-								href={`/${post.id}`}
-								date={post.data.publishedAt ?? undefined}
-								readingTime={readingTime}
-								tags={tags}
-								bylines={bylines}
+								title={post.title}
+								excerpt={post.excerpt ?? undefined}
+								featuredImage={post.featuredImage}
+								href={post.href}
+								date={post.publishedAt ?? undefined}
+								author={post.authorName}
 							/>
 						))}
 					</div>
@@ -244,7 +192,7 @@ function fmtDate(d: Date | null | undefined) {
 	)}
 
 	{/* ===== BUYER'S GUIDES STRIP ===== */}
-	{guidesWithMeta.length > 0 && (
+	{guides.length > 0 && (
 		<section class="guides-strip">
 			<div class="container">
 				<div class="section-head">
@@ -253,23 +201,20 @@ function fmtDate(d: Date | null | undefined) {
 					<a class="viewall" href="/guides">All guides →</a>
 				</div>
 				<div class="guides-grid">
-					{guidesWithMeta.map(({ guide, tags, readingTime }) => (
-						<a class="guide-card" href={`/guides/${guide.id}`}>
+					{guides.map((guide) => (
+						<a class="guide-card" href={guide.href}>
 							<div>
-								<div class="kicker">
-									{tags[0]?.label ?? "Guide"}
-									{readingTime ? ` · ${readingTime} min read` : ""}
-								</div>
-								<h3>{guide.data.title}</h3>
+								<div class="kicker">Guide</div>
+								<h3>{guide.title}</h3>
 								<div class="meta">
-									{guide.data.excerpt && (
-										<span class="excerpt">{guide.data.excerpt}</span>
+									{guide.excerpt && (
+										<span class="excerpt">{guide.excerpt}</span>
 									)}
 								</div>
 							</div>
 							<div class="pic">
-								{guide.data.featured_image && (
-									<Image image={guide.data.featured_image} />
+								{guide.featuredImage && (
+									<ResponsiveImage image={guide.featuredImage} sizes="(min-width: 900px) 200px, 40vw" />
 								)}
 							</div>
 						</a>
