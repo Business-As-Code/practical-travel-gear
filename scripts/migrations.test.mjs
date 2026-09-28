@@ -5,12 +5,12 @@ import { DatabaseSync } from 'node:sqlite';
 import { createDialect } from 'emdash/db/sqlite';
 import { createDirectMigrationExecutor, getCoreMigrationIdentity } from 'emdash/migrations';
 
-test('installed 0.38 migrations apply locally, retain revision triggers and are repeatable', async () => {
+test('installed 0.42 migrations apply locally, retain revision triggers and are repeatable', async () => {
   await mkdir('.wrangler', {recursive:true});
   const directory=await mkdtemp('.wrangler/migration-test-');
   const file=`${directory}/fixture.sqlite`;
   const identity=await getCoreMigrationIdentity();
-  assert.equal(identity.emdashVersion,'0.38.0');
+  assert.equal(identity.emdashVersion,'0.42.0');
   const execute=async action => {
     const executor=createDirectMigrationExecutor({target:{kind:'sqlite',label:'disposable-local-test',fingerprint:file},createDialect:()=>createDialect({url:file})});
     try { return await executor.execute({action,i18n:null,artifact}); }
