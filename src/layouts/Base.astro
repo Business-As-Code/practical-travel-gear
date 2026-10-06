@@ -1,5 +1,6 @@
 ---
-import { getMenu, getTaxonomyTerms } from "emdash";
+import { getMenu } from "emdash";
+import { getChromeTags } from "../lib/chrome-tags";
 import {
 	WidgetArea,
 	EmDashHead,
@@ -41,9 +42,9 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
 const [socialMenu, tags] = await Promise.all([
 	getMenu("social"),
-	// The footer renders links only; counting every tagged post adds D1 reads.
-	getTaxonomyTerms("tag", { includeCounts: false }),
+	getChromeTags(),
 ]);
+Astro.cache.set({ tags: ["emdash:taxonomy:tag"] });
 
 // Primary nav points at real category terms + guides. Fake slugs 404.
 const navItems: Array<{ label: string; url: string; icon: string | null }> = [
@@ -144,6 +145,8 @@ const isLoggedIn = !!Astro.locals.user;
 						resultsClass="site-search-results"
 						resultClass="site-search-result"
 						collections={["posts", "pages"]}
+						debounce={450}
+						limit={8}
 					/>
 					<button class="search-close" id="search-close" aria-label="Close search">&times;</button>
 				</div>
