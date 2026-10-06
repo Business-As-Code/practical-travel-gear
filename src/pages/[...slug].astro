@@ -6,6 +6,7 @@
  * This route checks for a post first, then a page, and rewrites
  * to the appropriate handler without changing the URL.
  */
+import { contentUnavailable } from "../lib/content-response";
 import { getEmDashEntry } from "emdash";
 import { rewriteNotFound } from "../lib/not-found";
 
@@ -45,12 +46,16 @@ function rewriteTo(path: string) {
 // Try post first (most common). Stash the full result on locals so the
 // rewritten target route can skip a redundant D1 lookup.
 const postResult = await getEmDashEntry("posts", slug);
+if (postResult.error) return contentUnavailable(postResult.error);
+Astro.cache.set(postResult.cacheHint);
 if (postResult.entry) {
 	Astro.locals.prefetchedEntry = { collection: "posts", slug, result: postResult };
 	return rewriteTo(`/posts/${slug}`);
 }
 
 const pageResult = await getEmDashEntry("pages", slug);
+if (pageResult.error) return contentUnavailable(pageResult.error);
+Astro.cache.set(pageResult.cacheHint);
 if (pageResult.entry) {
 	Astro.locals.prefetchedEntry = { collection: "pages", slug, result: pageResult };
 	return rewriteTo(`/pages/${slug}`);

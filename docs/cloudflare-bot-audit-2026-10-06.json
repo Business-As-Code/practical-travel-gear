@@ -1,0 +1,593 @@
+{
+  "observed_date_utc": "2026-10-05",
+  "collected_date": "2026-10-06",
+  "zone": "practicaltravelgear.com",
+  "zone_plan": "Free Website",
+  "source": "Cloudflare GraphQL httpRequestsAdaptiveGroups; counts may be adaptively sampled",
+  "request_sources": [
+    {
+      "count": 21615,
+      "dimensions": {
+        "requestSource": "eyeball"
+      }
+    },
+    {
+      "count": 4,
+      "dimensions": {
+        "requestSource": "edgeWorkerFetch"
+      }
+    },
+    {
+      "count": 3,
+      "dimensions": {
+        "requestSource": "edgeWorkerCacheAPI"
+      }
+    }
+  ],
+  "verified_bot_and_security_breakdown": [
+    {
+      "count": 13070,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": ""
+      }
+    },
+    {
+      "count": 4611,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "AI Crawler"
+      }
+    },
+    {
+      "count": 1769,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Search Engine Crawler"
+      }
+    },
+    {
+      "count": 949,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Search Engine Optimization"
+      }
+    },
+    {
+      "count": 686,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Page Preview"
+      }
+    },
+    {
+      "count": 265,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Feed Fetcher"
+      }
+    },
+    {
+      "count": 167,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "AI Search"
+      }
+    },
+    {
+      "count": 55,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "AI Assistant"
+      }
+    },
+    {
+      "count": 26,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Security"
+      }
+    },
+    {
+      "count": 9,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Advertising & Marketing"
+      }
+    },
+    {
+      "count": 8,
+      "dimensions": {
+        "securityAction": "block",
+        "securitySource": "firewallManaged",
+        "verifiedBotCategory": ""
+      }
+    },
+    {
+      "count": 4,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Aggregator"
+      }
+    },
+    {
+      "count": 2,
+      "dimensions": {
+        "securityAction": "unknown",
+        "securitySource": "unknown",
+        "verifiedBotCategory": "Webhooks"
+      }
+    },
+    {
+      "count": 1,
+      "dimensions": {
+        "securityAction": "block",
+        "securitySource": "bic",
+        "verifiedBotCategory": ""
+      }
+    }
+  ],
+  "top_404_paths": [
+    {
+      "count": 200,
+      "dimensions": {
+        "clientRequestPath": "/favicon.ico"
+      }
+    },
+    {
+      "count": 43,
+      "dimensions": {
+        "clientRequestPath": "/wp-content/uploads/bem-wireless-bluetooth.jpg"
+      }
+    },
+    {
+      "count": 34,
+      "dimensions": {
+        "clientRequestPath": "/new.php"
+      }
+    },
+    {
+      "count": 26,
+      "dimensions": {
+        "clientRequestPath": "/kids-and-family/feed/"
+      }
+    },
+    {
+      "count": 25,
+      "dimensions": {
+        "clientRequestPath": "/adventure-gear/feed/"
+      }
+    },
+    {
+      "count": 25,
+      "dimensions": {
+        "clientRequestPath": "/travel-accessories/feed/"
+      }
+    },
+    {
+      "count": 25,
+      "dimensions": {
+        "clientRequestPath": "/travel-luggage-bags/feed/"
+      }
+    },
+    {
+      "count": 25,
+      "dimensions": {
+        "clientRequestPath": "/sports-gear/feed/"
+      }
+    },
+    {
+      "count": 23,
+      "dimensions": {
+        "clientRequestPath": "/apple-touch-icon.png"
+      }
+    },
+    {
+      "count": 22,
+      "dimensions": {
+        "clientRequestPath": "/txets.php"
+      }
+    },
+    {
+      "count": 21,
+      "dimensions": {
+        "clientRequestPath": "/randkeyword.PhP7"
+      }
+    },
+    {
+      "count": 20,
+      "dimensions": {
+        "clientRequestPath": "/ws.php"
+      }
+    },
+    {
+      "count": 20,
+      "dimensions": {
+        "clientRequestPath": "/userfiles"
+      }
+    },
+    {
+      "count": 20,
+      "dimensions": {
+        "clientRequestPath": "/apple-touch-icon-precomposed.png"
+      }
+    },
+    {
+      "count": 19,
+      "dimensions": {
+        "clientRequestPath": "/gecko.php"
+      }
+    },
+    {
+      "count": 19,
+      "dimensions": {
+        "clientRequestPath": "/wp-content/index.php"
+      }
+    },
+    {
+      "count": 18,
+      "dimensions": {
+        "clientRequestPath": "/sendgrid.env"
+      }
+    },
+    {
+      "count": 18,
+      "dimensions": {
+        "clientRequestPath": "/.env.prod"
+      }
+    },
+    {
+      "count": 17,
+      "dimensions": {
+        "clientRequestPath": "/.env"
+      }
+    },
+    {
+      "count": 17,
+      "dimensions": {
+        "clientRequestPath": "/admin.php"
+      }
+    },
+    {
+      "count": 16,
+      "dimensions": {
+        "clientRequestPath": "/biufile.php"
+      }
+    },
+    {
+      "count": 16,
+      "dimensions": {
+        "clientRequestPath": "/adminfuns.php"
+      }
+    },
+    {
+      "count": 16,
+      "dimensions": {
+        "clientRequestPath": "/about/careers"
+      }
+    },
+    {
+      "count": 15,
+      "dimensions": {
+        "clientRequestPath": "/wp-admin/network/plugins.php"
+      }
+    },
+    {
+      "count": 15,
+      "dimensions": {
+        "clientRequestPath": "/wp-login.php"
+      }
+    }
+  ],
+  "top_user_agents": [
+    {
+      "count": 2021,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+      },
+      "sum": {
+        "visits": 41
+      }
+    },
+    {
+      "count": 1737,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      },
+      "sum": {
+        "visits": 149
+      }
+    },
+    {
+      "count": 1295,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "sum": {
+        "visits": 19
+      }
+    },
+    {
+      "count": 1021,
+      "dimensions": {
+        "userAgent": ""
+      },
+      "sum": {
+        "visits": 2
+      }
+    },
+    {
+      "count": 1004,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      },
+      "sum": {
+        "visits": 78
+      }
+    },
+    {
+      "count": 963,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+      },
+      "sum": {
+        "visits": 446
+      }
+    },
+    {
+      "count": 835,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Amazonbot/0.1; +https://developer.amazon.com/support/amazonbot) Chrome/119.0.6045.214 Safari/537.36"
+      },
+      "sum": {
+        "visits": 637
+      }
+    },
+    {
+      "count": 656,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+      },
+      "sum": {
+        "visits": 4
+      }
+    },
+    {
+      "count": 570,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+      },
+      "sum": {
+        "visits": 1
+      }
+    },
+    {
+      "count": 432,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/116.0.1938.76 Safari/537.36"
+      },
+      "sum": {
+        "visits": 119
+      }
+    },
+    {
+      "count": 366,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      },
+      "sum": {
+        "visits": 25
+      }
+    },
+    {
+      "count": 353,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (compatible; ExaSearchBot/1.0; +https://crawler.exa.ai/)"
+      },
+      "sum": {
+        "visits": 294
+      }
+    },
+    {
+      "count": 351,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)"
+      },
+      "sum": {
+        "visits": 309
+      }
+    },
+    {
+      "count": 345,
+      "dimensions": {
+        "userAgent": "Mozilla/5.0 (Linux; Android 7.0;) AppleWebKit/537.36 (HTML, like Gecko) Mobile Safari/537.36 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)"
+      },
+      "sum": {
+        "visits": 43
+      }
+    },
+    {
+      "count": 279,
+      "dimensions": {
+        "userAgent": "LinkedInBot/1.0 (compatible; Mozilla/5.0; Apache-HttpClient +http://www.linkedin.com)"
+      },
+      "sum": {
+        "visits": 0
+      }
+    }
+  ],
+  "top_ai_crawler_statuses": [
+    {
+      "count": 1604,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 942,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 660,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Amazonbot/0.1; +https://developer.amazon.com/support/amazonbot) Chrome/119.0.6045.214 Safari/537.36"
+      }
+    },
+    {
+      "count": 351,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 277,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Linux; Android 7.0;) AppleWebKit/537.36 (HTML, like Gecko) Mobile Safari/537.36 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)"
+      }
+    },
+    {
+      "count": 175,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 173,
+      "dimensions": {
+        "edgeResponseStatus": 301,
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Amazonbot/0.1; +https://developer.amazon.com/support/amazonbot) Chrome/119.0.6045.214 Safari/537.36"
+      }
+    },
+    {
+      "count": 103,
+      "dimensions": {
+        "edgeResponseStatus": 403,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 52,
+      "dimensions": {
+        "edgeResponseStatus": 301,
+        "userAgent": "Mozilla/5.0 (Linux; Android 7.0;) AppleWebKit/537.36 (HTML, like Gecko) Mobile Safari/537.36 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)"
+      }
+    },
+    {
+      "count": 49,
+      "dimensions": {
+        "edgeResponseStatus": 403,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 33,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)"
+      }
+    },
+    {
+      "count": 24,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 21,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Reflectionbot/1.0; +https://reflection.ai/bot) Chrome/151.0.0.0 Safari/537.36"
+      }
+    },
+    {
+      "count": 20,
+      "dimensions": {
+        "edgeResponseStatus": 404,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 16,
+      "dimensions": {
+        "edgeResponseStatus": 404,
+        "userAgent": "Mozilla/5.0 (Linux; Android 7.0;) AppleWebKit/537.36 (HTML, like Gecko) Mobile Safari/537.36 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)"
+      }
+    },
+    {
+      "count": 13,
+      "dimensions": {
+        "edgeResponseStatus": 403,
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 11,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.8010.52 Mobile Safari/537.36 (compatible; GoogleOther)"
+      }
+    },
+    {
+      "count": 11,
+      "dimensions": {
+        "edgeResponseStatus": 404,
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 9,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.6 Safari/537.36 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    },
+    {
+      "count": 9,
+      "dimensions": {
+        "edgeResponseStatus": 200,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0 (compatible; meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler))"
+      }
+    }
+  ],
+  "live_robots_policy": "Explicitly allows search, AI input, and AI training crawlers",
+  "settings_access": {
+    "bot_management": "403",
+    "zone_settings": "403",
+    "rulesets": "403",
+    "firewall_rules": "403",
+    "rate_limits": "403"
+  },
+  "limitations": [
+    "Request counts are not human visits or D1 query counts.",
+    "Browser user agents may be bots.",
+    "Analytics show managed firewall and Browser Integrity Check blocks; exact configuration and Bot Fight Mode state could not be read.",
+    "D1 usage windows differ from this complete UTC traffic day."
+  ],
+  "priorities": [
+    "Evaluate Cloudflare Configure AI bot policies: restrict Training while preserving desired Search and Agent uses.",
+    "Block observed PHP and environment-file probes with WAF rules, preserving legacy WordPress media paths.",
+    "Use plan-available rate limiting for expensive search endpoints after measuring per-client rates.",
+    "Optimize taxonomy reads and 404 log pruning even for legitimate requests.",
+    "Review Worker cache keys and cache-bypass traffic; zone Cache Rules do not control native Workers Cache."
+  ]
+}

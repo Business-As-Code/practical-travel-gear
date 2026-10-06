@@ -1,0 +1,820 @@
+{
+  "release": {
+    "emdash": "1.1.0",
+    "cloudflareAdapter": "1.1.0",
+    "wrangler": "4.148.0",
+    "workerVersion": "48f0136e-58cc-40ed-9204-c94a270bfb3d",
+    "deploymentId": "8f196dec-52c9-4c72-8dff-1aa6d5efefd2",
+    "deployedAt": "2026-10-06T21:39:07.55814Z"
+  },
+  "migrations": {
+    "executed": [
+      "090_redirect_enable_loop_guard",
+      "091_redirect_artifacts"
+    ],
+    "pending": [],
+    "unknownApplied": []
+  },
+  "backup": {
+    "counts": {
+      "_emdash_404_log": 5220,
+      "_emdash_api_tokens": 2,
+      "_emdash_authorization_codes": 0,
+      "_emdash_block_type_versions": 0,
+      "_emdash_block_types": 0,
+      "_emdash_byline_field_group_values": 0,
+      "_emdash_byline_field_values": 0,
+      "_emdash_byline_fields": 0,
+      "_emdash_bylines": 20,
+      "_emdash_collections": 3,
+      "_emdash_comment_reactions": 0,
+      "_emdash_comments": 245,
+      "_emdash_content_bylines": 1621,
+      "_emdash_content_references": 0,
+      "_emdash_cron_tasks": 0,
+      "_emdash_device_codes": 5,
+      "_emdash_entry_locks": 0,
+      "_emdash_fields": 10,
+      "_emdash_media_upload_attempts": 0,
+      "_emdash_media_usage": 113,
+      "_emdash_media_usage_activation": 1,
+      "_emdash_media_usage_cleanup": 1,
+      "_emdash_media_usage_cleanup_fence": 1,
+      "_emdash_media_usage_collection_deletions": 0,
+      "_emdash_media_usage_generation_writes": 0,
+      "_emdash_media_usage_index_status": 0,
+      "_emdash_media_usage_reconciliations": 0,
+      "_emdash_media_usage_sources": 81,
+      "_emdash_media_usage_work": 0,
+      "_emdash_menu_items": 0,
+      "_emdash_menus": 1,
+      "_emdash_migrations": 88,
+      "_emdash_migrations_lock": 1,
+      "_emdash_oauth_clients": 0,
+      "_emdash_oauth_tokens": 2,
+      "_emdash_rate_limits": 39,
+      "_emdash_redirect_write_lock": 1,
+      "_emdash_redirects": 260,
+      "_emdash_relations": 0,
+      "_emdash_revision_prune_queue": 0,
+      "_emdash_sections": 0,
+      "_emdash_seo": 2,
+      "_emdash_taxonomy_def_groups": 3,
+      "_emdash_taxonomy_defs": 3,
+      "_emdash_transfer_approvals": 0,
+      "_emdash_transfer_identity_map": 0,
+      "_emdash_transfer_media_blobs": 0,
+      "_emdash_transfer_operations": 0,
+      "_emdash_transfer_package_index": 0,
+      "_emdash_transfer_staged_files": 0,
+      "_emdash_widget_areas": 0,
+      "_emdash_widgets": 0,
+      "_plugin_indexes": 12,
+      "_plugin_state": 0,
+      "_plugin_storage": 1605,
+      "allowed_domains": 0,
+      "audit_logs": 0,
+      "auth_challenges": 0,
+      "auth_tokens": 0,
+      "content_taxonomies": 5883,
+      "credentials": 5,
+      "ec_guides": 32,
+      "ec_pages": 33,
+      "ec_posts": 1584,
+      "media": 7241,
+      "media_folders": 0,
+      "oauth_accounts": 0,
+      "options": 22,
+      "revisions": 180,
+      "subscribers": 0,
+      "taxonomies": 1853,
+      "users": 19,
+      "_emdash_fts_guides": 31,
+      "_emdash_fts_pages": 33,
+      "_emdash_fts_posts": 1573
+    },
+    "ordinaryTables": 72,
+    "virtualTables": 3,
+    "integrityCheck": "ok",
+    "foreignKeyViolations": 0,
+    "sha256": "19f73affa4ffdbe08f3caccfdd565fc9fa037a41c305a17c7ba1394cefa299bc",
+    "bookmark": "000011bc-00000006-000050fc-ea6fc55ef7f4b42085b92fef9e65680e",
+    "ftsRowsRestored": true
+  },
+  "rehearsal": {
+    "executed": [
+      "090_redirect_enable_loop_guard",
+      "091_redirect_artifacts"
+    ],
+    "originalDataTablesUnchanged": 73,
+    "integrityCheck": "ok",
+    "foreignKeyViolations": 0
+  },
+  "validation": {
+    "testsPassed": 56,
+    "typecheckErrors": 0,
+    "typecheckWarnings": 0,
+    "auditVulnerabilities": 0,
+    "production": {
+      "first": [
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.279,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/posts",
+          "status": 200,
+          "seconds": 0.278,
+          "bytes": 40325,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/guides",
+          "status": 200,
+          "seconds": 0.279,
+          "bytes": 41372,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/rss.xml",
+          "status": 200,
+          "seconds": 0.273,
+          "bytes": 10918,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "seconds": 0.222,
+          "bytes": 393,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-posts.xml",
+          "status": 200,
+          "seconds": 0.425,
+          "bytes": 238813,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-pages.xml",
+          "status": 200,
+          "seconds": 0.25,
+          "bytes": 1618,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-guides.xml",
+          "status": 200,
+          "seconds": 0.241,
+          "bytes": 4626,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/category/accessories",
+          "status": 200,
+          "seconds": 0.524,
+          "bytes": 39855,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/_emdash/api/search?q=bag&limit=8",
+          "status": 200,
+          "seconds": 1.139,
+          "bytes": 2113,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": null
+        }
+      ],
+      "repeated": [
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.251,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/posts",
+          "status": 200,
+          "seconds": 0.219,
+          "bytes": 40325,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/guides",
+          "status": 200,
+          "seconds": 0.251,
+          "bytes": 41372,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/rss.xml",
+          "status": 200,
+          "seconds": 0.217,
+          "bytes": 10918,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "seconds": 0.242,
+          "bytes": 393,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-posts.xml",
+          "status": 200,
+          "seconds": 0.433,
+          "bytes": 238813,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-pages.xml",
+          "status": 200,
+          "seconds": 0.206,
+          "bytes": 1618,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-guides.xml",
+          "status": 200,
+          "seconds": 0.222,
+          "bytes": 4626,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/category/accessories",
+          "status": 200,
+          "seconds": 0.599,
+          "bytes": 39855,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.246,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/hiking-hydration-gear",
+          "status": 200,
+          "seconds": 0.941,
+          "bytes": 40717,
+          "cache": "MISS",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/see-hawaii-with-shaka-guide-audio-driving-tours",
+          "status": 200,
+          "seconds": 1.845,
+          "bytes": 37958,
+          "cache": "MISS",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.27,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/posts",
+          "status": 200,
+          "seconds": 0.253,
+          "bytes": 40325,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/guides",
+          "status": 200,
+          "seconds": 0.243,
+          "bytes": 41372,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/rss.xml",
+          "status": 200,
+          "seconds": 0.214,
+          "bytes": 10918,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "seconds": 0.209,
+          "bytes": 393,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-posts.xml",
+          "status": 200,
+          "seconds": 0.419,
+          "bytes": 238813,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-pages.xml",
+          "status": 200,
+          "seconds": 0.208,
+          "bytes": 1618,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-guides.xml",
+          "status": 200,
+          "seconds": 0.235,
+          "bytes": 4626,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/category/accessories",
+          "status": 200,
+          "seconds": 0.522,
+          "bytes": 39855,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.268,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/hiking-hydration-gear",
+          "status": 200,
+          "seconds": 0.242,
+          "bytes": 40717,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/see-hawaii-with-shaka-guide-audio-driving-tours",
+          "status": 200,
+          "seconds": 0.481,
+          "bytes": 37958,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.257,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/posts",
+          "status": 200,
+          "seconds": 0.242,
+          "bytes": 40325,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/guides",
+          "status": 200,
+          "seconds": 0.243,
+          "bytes": 41372,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/rss.xml",
+          "status": 200,
+          "seconds": 0.245,
+          "bytes": 10918,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "seconds": 0.196,
+          "bytes": 393,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-posts.xml",
+          "status": 200,
+          "seconds": 0.479,
+          "bytes": 238813,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-pages.xml",
+          "status": 200,
+          "seconds": 0.233,
+          "bytes": 1618,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-guides.xml",
+          "status": 200,
+          "seconds": 0.237,
+          "bytes": 4626,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/category/accessories",
+          "status": 200,
+          "seconds": 0.52,
+          "bytes": 39855,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.224,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/hiking-hydration-gear",
+          "status": 200,
+          "seconds": 0.242,
+          "bytes": 40717,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/see-hawaii-with-shaka-guide-audio-driving-tours",
+          "status": 200,
+          "seconds": 0.245,
+          "bytes": 37958,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.23,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/posts",
+          "status": 200,
+          "seconds": 0.229,
+          "bytes": 40325,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/guides",
+          "status": 200,
+          "seconds": 0.241,
+          "bytes": 41372,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/rss.xml",
+          "status": 200,
+          "seconds": 0.225,
+          "bytes": 10918,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap.xml",
+          "status": 200,
+          "seconds": 0.221,
+          "bytes": 393,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-posts.xml",
+          "status": 200,
+          "seconds": 0.439,
+          "bytes": 238813,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-pages.xml",
+          "status": 200,
+          "seconds": 0.216,
+          "bytes": 1618,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/sitemap-guides.xml",
+          "status": 200,
+          "seconds": 0.216,
+          "bytes": 4626,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/category/accessories",
+          "status": 200,
+          "seconds": 0.52,
+          "bytes": 39855,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/",
+          "status": 200,
+          "seconds": 0.236,
+          "bytes": 30314,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/hiking-hydration-gear",
+          "status": 200,
+          "seconds": 0.229,
+          "bytes": 40717,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        },
+        {
+          "path": "/see-hawaii-with-shaka-guide-audio-driving-tours",
+          "status": 200,
+          "seconds": 0.238,
+          "bytes": 37958,
+          "cache": "HIT",
+          "retryAfter": null,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "body": null
+        }
+      ],
+      "security": [
+        {
+          "path": "/ptg-verification-missing-20261006",
+          "status": 404,
+          "seconds": 0.435,
+          "bytes": 683,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Page not found | Practical Travel Gear</title>\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n<h1>404</h1>\n<p>The page you're looking for doesn't exist.</p>\n<p><a href=\"/\">Go back home</a></p>\n<script type=\"module\" src=\"https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c"
+        },
+        {
+          "path": "/.env",
+          "status": 403,
+          "seconds": 0.38,
+          "bytes": 33,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": "{\"error\":{\"message\":\"Forbidden\"}}"
+        },
+        {
+          "path": "/vendor/sendgrid.env",
+          "status": 403,
+          "seconds": 0.397,
+          "bytes": 33,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": "{\"error\":{\"message\":\"Forbidden\"}}"
+        },
+        {
+          "path": "/wp-admin",
+          "status": 403,
+          "seconds": 0.384,
+          "bytes": 33,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": "{\"error\":{\"message\":\"Forbidden\"}}"
+        },
+        {
+          "path": "/wp-login.php",
+          "status": 403,
+          "seconds": 0.347,
+          "bytes": 33,
+          "cache": "BYPASS",
+          "retryAfter": null,
+          "cacheControl": "private, no-store",
+          "body": "{\"error\":{\"message\":\"Forbidden\"}}"
+        }
+      ]
+    },
+    "quota": {
+      "requests": 40,
+      "seconds": 1.746,
+      "statuses": {
+        "400": 20,
+        "429": 20
+      },
+      "blockedRetryHeaders": [
+        "60"
+      ]
+    }
+  },
+  "earlyUsage": {
+    "generatedAt": "2026-10-06T21:36:09.656Z",
+    "start": "2026-10-06T20:57:30.553Z",
+    "end": "2026-10-06T21:26:07.908Z",
+    "hours": 0.47704305555555554,
+    "fullDayAvailable": false,
+    "before24Hours": {
+      "readQueries": 104481,
+      "rowsRead": 35620284,
+      "rowsWritten": 12053,
+      "writeQueries": 3275
+    },
+    "after": {
+      "readQueries": 1327,
+      "rowsRead": 80754,
+      "rowsWritten": 90,
+      "writeQueries": 90
+    },
+    "worker": {
+      "errors": 0,
+      "requests": 225,
+      "subrequests": 66
+    },
+    "limiter": {
+      "errors": 0,
+      "requests": 43,
+      "wallTime": 1089420
+    },
+    "limiterSql": {
+      "duration": 0.118281984,
+      "exceededCpuErrors": 0,
+      "exceededMemoryErrors": 0,
+      "fatalInternalErrors": 0,
+      "rowsRead": 67,
+      "rowsWritten": 55
+    },
+    "readsPerWorkerRequest": 358.9066666666667,
+    "estimatedDailyReads": 4062727.6247485233,
+    "estimatedReductionPercent": 88.59434241246217,
+    "limitations": [
+      "Partial-day daily estimates are extrapolations.",
+      "D1 reads include cron, editors and audit queries; Workers requests include bots and cache hits.",
+      "Analytics can be delayed or sampled. Duration is reported in Cloudflare metric units; it is not an invoice amount."
+    ]
+  },
+  "limitations": [
+    "A full day after the final release has not elapsed.",
+    "Original intermittent platform failures were not consistently reproduced; confirmed error-handling defects were fixed.",
+    "No new R2 media backup was made; this upgrade does not modify media bytes.",
+    "Logical database backup is multi-query; Time Travel bookmark provides point-in-time recovery.",
+    "Zone configuration and original invoice are inaccessible with current credentials."
+  ]
+}

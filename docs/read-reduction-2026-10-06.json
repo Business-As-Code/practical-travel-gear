@@ -1,0 +1,449 @@
+{
+  "verified_at_utc": "2026-10-06T20:59:04.351597+00:00",
+  "worker": "practical-travel-gear",
+  "live_version": "58de0b06-f463-4378-9e5c-2a0693df31ae",
+  "source_branch": "fix/d1-reads-and-request-abuse",
+  "source_base_commit": "4df36e9e5667505991a8bb646c91b7e046dacd82",
+  "changes": {
+    "taxonomy": [
+      "Replace full tag-list queries with indexed ten-link query.",
+      "Remove unconditional all-taxonomy term prefetch with pinned, reproducible EmDash 0.42 patch.",
+      "Resolve an archive term by slug instead of fetching every term.",
+      "Retain taxonomy invalidation tags on cached HTML."
+    ],
+    "listing": [
+      "Add partial indexes for public post and guide listing ordering.",
+      "Use metadata-only cards for sidebar recent posts."
+    ],
+    "cleanup": [
+      "Use indexed victim selection instead of scanning retained rows with NOT IN.",
+      "Keep newest ten thousand rows, including tied timestamps; cleanup remains on native cron."
+    ],
+    "scanner": [
+      "Reject PHP, .env, .git and wp-admin probes before EmDash initialization.",
+      "Preserve CMS media and legacy WordPress uploads.",
+      "Implemented in Worker because current token cannot read or write zone WAF rules."
+    ],
+    "search": [
+      "One SQLite Durable Object holds consistent quota counters shared by the public search page, API, and suggestions.",
+      "Per client: twenty requests per fixed ten-second window and sixty per fixed minute.",
+      "Requests lacking a trusted client IP share a fallback quota. Raw IPs are not stored in quota table; keys use SHA256.",
+      "Expired counter rows removed on next activity, at most once per minute.",
+      "No D1 for quota checks, scanner denials, or 429 refusals.",
+      "Autocomplete waits 450ms and requests eight results.",
+      "Public page cache hits may return without Worker/quota execution; they also do not query D1."
+    ]
+  },
+  "query_evidence": {
+    "ten_tags_before_reads": 3256,
+    "ten_tags_after_reads": 10,
+    "listing_previous_24h_average_reads": 6255,
+    "listing_sample_after_reads": 55,
+    "listing_after_rows_returned": 22,
+    "cleanup_victim_selection_before_reads": 10438,
+    "cleanup_victim_selection_after_reads": 5219,
+    "cleanup_selection_rows_returned": 0,
+    "comparison_notes": "Old listing figure is an analytics average; new figure is a direct live 22-card query. These are query-level reductions, not measured whole-site daily savings."
+  },
+  "validation": {
+    "node": "24.18.0",
+    "wrangler": "4.148.0",
+    "clean_install_patch_applied": true,
+    "tests_passed": 54,
+    "type_errors": 0,
+    "type_warnings": 0,
+    "production_build": "passed",
+    "live_public_probes": [
+      {
+        "path": "/wp-login.php",
+        "status": 403,
+        "seconds": 1.11,
+        "cache": "BYPASS",
+        "cache_control": null,
+        "length": 33,
+        "json": {
+          "error": {
+            "message": "Forbidden"
+          }
+        },
+        "footer_tags": 0
+      },
+      {
+        "path": "/.env",
+        "status": 403,
+        "seconds": 1.1,
+        "cache": "BYPASS",
+        "cache_control": null,
+        "length": 33,
+        "json": {
+          "error": {
+            "message": "Forbidden"
+          }
+        },
+        "footer_tags": 0
+      },
+      {
+        "path": "/randkeyword.PhP7",
+        "status": 403,
+        "seconds": 1.14,
+        "cache": "BYPASS",
+        "cache_control": null,
+        "length": 33,
+        "json": {
+          "error": {
+            "message": "Forbidden"
+          }
+        },
+        "footer_tags": 0
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "seconds": 1.86,
+        "cache": "MISS",
+        "cache_control": null,
+        "length": 30366,
+        "json": null,
+        "footer_tags": 10
+      },
+      {
+        "path": "/posts",
+        "status": 200,
+        "seconds": 1.0,
+        "cache": "MISS",
+        "cache_control": null,
+        "length": 40377,
+        "json": null,
+        "footer_tags": 10
+      },
+      {
+        "path": "/category/travel-luggage-bags",
+        "status": 200,
+        "seconds": 0.9,
+        "cache": "MISS",
+        "cache_control": null,
+        "length": 40672,
+        "json": null,
+        "footer_tags": 10
+      },
+      {
+        "path": "/search?q=bag",
+        "status": 200,
+        "seconds": 0.88,
+        "cache": "MISS",
+        "cache_control": null,
+        "length": 38209,
+        "json": null,
+        "footer_tags": 10
+      },
+      {
+        "path": "/_emdash/api/search?q=bag&limit=8",
+        "status": 200,
+        "seconds": 1.81,
+        "cache": "BYPASS",
+        "cache_control": null,
+        "length": 2113,
+        "json": null,
+        "footer_tags": 0
+      }
+    ],
+    "warm_cache": {
+      "status": 200,
+      "cache": "HIT",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "tags": 10
+    },
+    "live_rate_limit_test": [
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 4.07,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 3.53,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 2.87,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 3.51,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 4.06,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 3.53,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 2.52,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 2.65,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 1.66,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.83,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 1.38,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.33,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.37,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 1.62,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 1.27,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 1.09,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.33,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.38,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.39,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.34,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.39,
+        "error": null
+      },
+      {
+        "status": 400,
+        "retry_after": null,
+        "seconds": 0.34,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.4,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.3,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.29,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.29,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.29,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.34,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.38,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.35,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.32,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.32,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.4,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.31,
+        "error": null
+      },
+      {
+        "status": 429,
+        "retry_after": "60",
+        "seconds": 0.35,
+        "error": null
+      }
+    ],
+    "final_live_probes": [
+      {
+        "path": "/.env",
+        "status": 403,
+        "cache": "BYPASS",
+        "bytes": 33
+      },
+      {
+        "path": "/posts",
+        "status": 404,
+        "cache": "BYPASS",
+        "bytes": 683
+      },
+      {
+        "path": "/_emdash/api/search?q=bag&limit=8",
+        "status": 500,
+        "cache": "BYPASS",
+        "bytes": 75
+      }
+    ],
+    "recovery_live_probes": [
+      {
+        "path": "/posts",
+        "status": 200,
+        "bytes": 40377
+      },
+      {
+        "path": "/_emdash/api/search?q=bag&limit=8",
+        "status": 200,
+        "bytes": 2113
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "bytes": 30366
+      }
+    ],
+    "subsequent_probe": "A further verification run timed out after 30 seconds; no blanket reliability claim is made."
+  },
+  "limitations": [
+    "Whole-site daily D1 reduction requires a full comparable post-deployment traffic window.",
+    "Scanner and search denials still count as Worker invocations.",
+    "Durable Object usage is billed separately from D1; search-only calls and bounded counters are expected to fit included allocations at current site traffic, subject to other account usage.",
+    "The EmDash patch must be reviewed when upgrading; postinstall fails if it cannot apply.",
+    "Zone WAF settings remain inaccessible with current credentials.",
+    "One post-deploy probe returned /posts 404 and search API 500; immediate retries returned 200. A later verification request timed out after 30 seconds. Similar intermittent responses and slow cache misses existed in the earlier baseline; root cause remains unresolved."
+  ],
+  "rollback": {
+    "worker": "For a quick guard rollback, rebuild protected-worker.ts with fetch delegating directly to the original worker.fetch while retaining the PublicSearchLimiter export and binding. Existing Durable Object namespace/class migration must not be deleted incidentally. A complete source rollback requires reviewing those migration constraints.",
+    "indexes": "Additive site indexes can remain with older code; dropping them is not required to roll back Worker behavior."
+  }
+}
