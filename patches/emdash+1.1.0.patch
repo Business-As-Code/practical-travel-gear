@@ -1,0 +1,96 @@
+diff --git a/node_modules/emdash/src/astro/prefetch.ts b/node_modules/emdash/src/astro/prefetch.ts
+--- a/node_modules/emdash/src/astro/prefetch.ts
++++ b/node_modules/emdash/src/astro/prefetch.ts
+@@ -79,7 +79,7 @@
+ 			getSiteSettings(),
+ 			prefetchMenus(),
+ 			prefetchWidgetAreas(),
+-			prefetchTaxonomyTerms(),
++			// Taxonomy lists are unbounded. Load only terms requested by a template.
+ 		]);
+ 	} catch (error) {
+ 		// Defensive: Promise.allSettled shouldn't reject, but never let a prefetch
+diff --git a/node_modules/emdash/src/database/repositories/redirect.ts b/node_modules/emdash/src/database/repositories/redirect.ts
+--- a/node_modules/emdash/src/database/repositories/redirect.ts
++++ b/node_modules/emdash/src/database/repositories/redirect.ts
+@@ -695,13 +695,13 @@
+ 			.deleteFrom("_emdash_404_log")
+ 			.where(
+ 				"id",
+-				"not in",
++				"in",
+ 				this.db
+ 					.selectFrom("_emdash_404_log")
+ 					.select("id")
+ 					.orderBy("last_seen_at", "desc")
+ 					.orderBy("id", "desc")
+-					.limit(MAX_404_LOG_ROWS),
++					.limit(2147483647).offset(MAX_404_LOG_ROWS),
+ 			)
+ 			.executeTakeFirst();
+ 		return Number(result.numDeletedRows);
+diff --git a/node_modules/emdash/src/astro/middleware.ts b/node_modules/emdash/src/astro/middleware.ts
+--- a/node_modules/emdash/src/astro/middleware.ts
++++ b/node_modules/emdash/src/astro/middleware.ts
+@@ -883,8 +883,9 @@
+ 						// anonymous path, silently degrading every public page.
+ 						if (Date.now() - lastRuntimeInitErrorLogAt >= RUNTIME_INIT_ERROR_LOG_INTERVAL_MS) {
+ 							lastRuntimeInitErrorLogAt = Date.now();
+-							console.error("[emdash] runtime init failed (page renders without CMS data):", error);
++							console.error("[emdash] runtime init failed:", error);
+ 						}
++						return new Response("Service temporarily unavailable", { status: 503, headers: { "Cache-Control": "private, no-store", "Cloudflare-CDN-Cache-Control": "no-store", "Retry-After": "5", "X-PTG-Runtime-Unavailable": "1" } });
+ 					}
+ 					timings.push({ name: "rt", dur: performance.now() - t0, desc: "Runtime init" });
+ 					// Append cold-only sub-phase timings so the breakdown is visible
+@@ -1133,6 +1134,7 @@
+ 				console.error("EmDash middleware error:", error);
+ 				const configurationError = runtimeConfigurationErrorResponse(error, url.pathname);
+ 				if (configurationError) return configurationError;
++				return new Response("Service temporarily unavailable", { status: 503, headers: { "Cache-Control": "private, no-store", "Cloudflare-CDN-Cache-Control": "no-store", "Retry-After": "5", "X-PTG-Runtime-Unavailable": "1" } });
+ 			}
+ 
+ 			// Ask the adapter for a request-scoped db. When it returns one, we stash
+diff --git a/node_modules/emdash/dist/astro/middleware.mjs b/node_modules/emdash/dist/astro/middleware.mjs
+--- a/node_modules/emdash/dist/astro/middleware.mjs
++++ b/node_modules/emdash/dist/astro/middleware.mjs
+@@ -405,7 +405,7 @@
+ 			getSiteSettings(),
+ 			prefetchMenus(),
+ 			prefetchWidgetAreas(),
+-			prefetchTaxonomyTerms()
++			// Taxonomy lists are unbounded. Load only terms requested by a template.
+ 		]);
+ 	} catch (error) {
+ 		console.error("[emdash] layout prefetch failed (non-fatal):", error);
+@@ -988,8 +988,9 @@
+ 						}
+ 						if (Date.now() - lastRuntimeInitErrorLogAt >= RUNTIME_INIT_ERROR_LOG_INTERVAL_MS) {
+ 							lastRuntimeInitErrorLogAt = Date.now();
+-							console.error("[emdash] runtime init failed (page renders without CMS data):", error);
++							console.error("[emdash] runtime init failed:", error);
+ 						}
++						return new Response("Service temporarily unavailable", { status: 503, headers: { "Cache-Control": "private, no-store", "Cloudflare-CDN-Cache-Control": "no-store", "Retry-After": "5", "X-PTG-Runtime-Unavailable": "1" } });
+ 					}
+ 					timings.push({
+ 						name: "rt",
+@@ -1145,6 +1146,7 @@
+ 				console.error("EmDash middleware error:", error);
+ 				const configurationError = runtimeConfigurationErrorResponse(error, url.pathname);
+ 				if (configurationError) return configurationError;
++				return new Response("Service temporarily unavailable", { status: 503, headers: { "Cache-Control": "private, no-store", "Cloudflare-CDN-Cache-Control": "no-store", "Retry-After": "5", "X-PTG-Runtime-Unavailable": "1" } });
+ 			}
+ 			const lastContentWriteAt = canUseCachedBinding && config?.database?.needsLastContentWriteAt ? await getLastContentWriteAt() : void 0;
+ 			const scoped = createRequestScopedDb$1({
+diff --git a/node_modules/emdash/dist/redirect-xZNpBoGp.mjs b/node_modules/emdash/dist/redirect-xZNpBoGp.mjs
+--- a/node_modules/emdash/dist/redirect-xZNpBoGp.mjs
++++ b/node_modules/emdash/dist/redirect-xZNpBoGp.mjs
+@@ -345,7 +345,7 @@
+ 	* Called by scheduled system cleanup, never by the anonymous request path.
+ 	*/
+ 	async cleanup404Log() {
+-		const result = await this.db.deleteFrom("_emdash_404_log").where("id", "not in", this.db.selectFrom("_emdash_404_log").select("id").orderBy("last_seen_at", "desc").orderBy("id", "desc").limit(MAX_404_LOG_ROWS)).executeTakeFirst();
++		const result = await this.db.deleteFrom("_emdash_404_log").where("id", "in", this.db.selectFrom("_emdash_404_log").select("id").orderBy("last_seen_at", "desc").orderBy("id", "desc").limit(2147483647).offset(MAX_404_LOG_ROWS)).executeTakeFirst();
+ 		return Number(result.numDeletedRows);
+ 	}
+ 	async find404s(opts) {

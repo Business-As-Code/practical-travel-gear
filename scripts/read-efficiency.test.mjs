@@ -35,7 +35,7 @@ test('ten visible tags and published listings use indexes without temporary sort
 });
 
 test('patched cleanup retains newest ten thousand including tied timestamps', async () => {
-  const { t: RedirectRepository } = await import('../node_modules/emdash/dist/redirect-BvFKh8Sz.mjs');
+  const { t: RedirectRepository } = await import('../node_modules/emdash/dist/redirect-xZNpBoGp.mjs');
   // Run the actual compiled repository query against SQLite, including its binds.
   const { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler } = await import('kysely');
   const db = new Kysely({ dialect: { createAdapter: () => new SqliteAdapter(), createDriver: () => new DummyDriver(), createIntrospector: d => new SqliteIntrospector(d), createQueryCompiler: () => new SqliteQueryCompiler() } });

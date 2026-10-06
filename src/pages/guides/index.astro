@@ -1,16 +1,18 @@
 ---
+import { contentUnavailable } from "../../lib/content-response";
 import { getEmDashCollection, getEntryTerms } from "emdash";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
 
 const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
-const { entries: guides, nextCursor, cacheHint } = await getEmDashCollection("guides", {
+const { entries: guides, nextCursor, cacheHint, error } = await getEmDashCollection("guides", {
 	orderBy: { published_at: "desc" },
 	limit: 21,
 	cursor,
 });
 
+if (error) return contentUnavailable(error);
 Astro.cache.set(cacheHint);
 
 const guidesWithMeta = await Promise.all(

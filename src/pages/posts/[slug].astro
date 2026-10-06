@@ -1,11 +1,13 @@
 ---
+import { contentUnavailable } from "../../lib/content-response";
 import {
 	getEmDashEntry,
 	getEmDashCollection,
 	getEntryTerms,
 	getSeoMeta,
 } from "emdash";
-import { PortableText, CommentForm } from "emdash/ui";
+import { PortableText } from "emdash/ui";
+import { CommentForm } from "emdash/ui/comments";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import ResponsiveImage from "../../components/ResponsiveImage.astro";
@@ -27,10 +29,12 @@ if (!Astro.request.headers.get("X-Rewrite")) {
 }
 
 const prefetched = Astro.locals.prefetchedEntry;
-const { entry: post, cacheHint } =
+const { entry: post, cacheHint, error } =
 	prefetched?.collection === "posts" && prefetched.slug === slug
 		? (prefetched.result as Awaited<ReturnType<typeof getEmDashEntry<"posts">>>)
 		: await getEmDashEntry("posts", slug);
+
+if (error) return contentUnavailable(error);
 
 if (!post) {
 	return rewriteNotFound(Astro);

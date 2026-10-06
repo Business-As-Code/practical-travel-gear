@@ -1,4 +1,5 @@
 ---
+import { contentUnavailable } from "../../lib/content-response";
 import { getEmDashEntry } from "emdash";
 import { PortableText } from "emdash/ui";
 import { rewriteNotFound } from "../../lib/not-found";
@@ -17,10 +18,12 @@ if (!Astro.request.headers.get("X-Rewrite")) {
 }
 
 const prefetched = Astro.locals.prefetchedEntry;
-const { entry: page, cacheHint } =
+const { entry: page, cacheHint, error } =
 	prefetched?.collection === "pages" && prefetched.slug === slug
 		? (prefetched.result as Awaited<ReturnType<typeof getEmDashEntry<"pages">>>)
 		: await getEmDashEntry("pages", slug);
+
+if (error) return contentUnavailable(error);
 
 if (!page) {
 	return rewriteNotFound(Astro);

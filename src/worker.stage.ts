@@ -1,5 +1,5 @@
 // Disposable staging entry only; production never imports this module.
-import app from './worker';
+import app from './protected-worker';
 import nativeCacheProvider from './lib/native-cache-provider';
 import { Kysely } from 'kysely';
 import { applySeed, type SeedFile } from 'emdash/seed';
@@ -7,7 +7,7 @@ import seed from '../seed/stage.json';
 import { cache } from 'cloudflare:workers';
 import { createDialect } from '@emdash-cms/cloudflare/db/d1';
 import { createDirectMigrationExecutor, getCoreMigrationIdentity } from 'emdash/migrations';
-export { PluginBridge } from './worker';
+export { PluginBridge, PublicSearchLimiter } from './protected-worker';
 const safe = (body: unknown, status=200) => Response.json(body,{status,headers:{'Cache-Control':'private, no-store','Cloudflare-CDN-Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow, noarchive'}});
 export default {
  async fetch(request: Request, env: any, ctx: any) {

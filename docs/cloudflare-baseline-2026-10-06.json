@@ -1,0 +1,634 @@
+{
+  "checked_at_utc": "2026-10-06T20:06:53.100664+00:00",
+  "scope": "Read-only repository, deployment, usage and public-route audit; no deploy, push, schema/content/billing change.",
+  "tooling": {
+    "control_plane_wrangler": "4.148.0",
+    "npm_registry_latest_wrangler": "4.148.0",
+    "release_worktree_pinned_wrangler": "4.131.1",
+    "cloudflare_mcp_available_in_session": false,
+    "authentication": "Existing Wrangler OAuth via supported auth token command, captured in memory only",
+    "invoice_access": "Billing history and subscriptions returned HTTP 403; no exact invoice or credits verified"
+  },
+  "source_states": {
+    "current_workspace": {
+      "path": "/home/chrisguill/hermes/practical-travel-gear/practical-travel-gear",
+      "branch": "main",
+      "head": "b7ab2c830c0efb4cb12c9daa0b7da8d8d980bdbd",
+      "state": "Preserved dirty historical source, nominal EmDash 0.34 dependencies; do not use as production baseline."
+    },
+    "github_main": {
+      "head": "2bcf1fccba687660399824a0ca0e51b76bc800d2",
+      "emdash": "0.38.0",
+      "state": "Fetched and behind actual production release."
+    },
+    "live_matching_worktree": {
+      "path": "/home/chrisguill/Projects/ptg-emdash-042",
+      "branch": "upgrade/emdash-042",
+      "head": "4df36e9e5667505991a8bb646c91b7e046dacd82",
+      "emdash": "0.42.0",
+      "astro": "7.3.2",
+      "clean": true,
+      "retained_server_modules": 622,
+      "byte_identical_remote_module_payloads": 622,
+      "provenance_limit": "Downloaded current Worker module bytes match retained build exactly. No GitHub build-log mapping for this September 28 version was obtained."
+    }
+  },
+  "cloudflare": {
+    "account_id": "eddf7805053d5e32afd090c3ec22126c",
+    "worker": "practical-travel-gear",
+    "deployment": {
+      "id": "bbe5321e-e224-4172-bf5c-fbad3aac07c9",
+      "source": "wrangler",
+      "strategy": "percentage",
+      "author_email": "chris@gbpromotions.com",
+      "annotations": {
+        "workers/triggered_by": "deployment"
+      },
+      "versions": [
+        {
+          "version_id": "573a60f1-08d2-4f39-bc79-d8b93fc8fa8c",
+          "percentage": 100
+        }
+      ],
+      "created_on": "2026-09-28T22:47:25.333276Z"
+    },
+    "bindings": [
+      {
+        "name": "ASSETS",
+        "type": "assets"
+      },
+      {
+        "name": "CF_VERSION_METADATA",
+        "type": "version_metadata"
+      },
+      {
+        "database_id": "d84b7ddc-76d7-4d64-92bb-c3e7fc7d4dec",
+        "id": "d84b7ddc-76d7-4d64-92bb-c3e7fc7d4dec",
+        "name": "DB",
+        "type": "d1"
+      },
+      {
+        "name": "EMDASH_AUTH_SECRET",
+        "type": "secret_text"
+      },
+      {
+        "name": "IMAGES",
+        "type": "images"
+      },
+      {
+        "name": "LOADER",
+        "type": "worker_loader"
+      },
+      {
+        "bucket_name": "practical-travel-gear",
+        "name": "MEDIA",
+        "type": "r2_bucket"
+      },
+      {
+        "name": "SESSION",
+        "namespace_id": "7a1de3ae7ccf4e608abb6c2a0c0ba09e",
+        "type": "kv_namespace"
+      }
+    ],
+    "runtime": {
+      "placement": {
+        "mode": "targeted",
+        "target": [
+          2
+        ]
+      },
+      "compatibility_date": "2026-03-29",
+      "compatibility_flags": [
+        "nodejs_compat"
+      ],
+      "usage_model": "standard",
+      "tags": [],
+      "tail_consumers": [],
+      "logpush": false,
+      "observability": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "redact_query_string": false,
+        "logs": {
+          "enabled": true,
+          "head_sampling_rate": 1,
+          "persist": true,
+          "invocation_logs": true
+        },
+        "traces": {
+          "enabled": false,
+          "persist": true,
+          "head_sampling_rate": 1
+        }
+      },
+      "annotations": {
+        "workers/triggered_by": "version_upload"
+      },
+      "cache_options": {
+        "enabled": true,
+        "cross_version_cache": false
+      }
+    },
+    "cron": [
+      {
+        "cron": "*/5 * * * *",
+        "created_on": "2026-08-23T21:25:00.069286Z",
+        "modified_on": "2026-09-28T22:47:26.778859Z"
+      }
+    ],
+    "preview_routing": {
+      "enabled": false,
+      "previews_enabled": false
+    },
+    "d1_last_24_hours": {
+      "rows_read": 35734074,
+      "rows_written": 3388,
+      "read_queries": 103314,
+      "write_queries": 3290,
+      "database_bytes": 35688448
+    },
+    "r2": {
+      "objects": 7288,
+      "size_gb_reported_by_wrangler": 3.14
+    },
+    "migration_history_readback": {
+      "applied_names": [
+        "001_initial",
+        "002_media_status",
+        "003_schema_registry",
+        "004_plugins",
+        "005_menus",
+        "006_taxonomy_defs",
+        "007_widgets",
+        "008_auth",
+        "009_user_disabled",
+        "011_sections",
+        "012_search",
+        "013_scheduled_publishing",
+        "014_draft_revisions",
+        "015_indexes",
+        "016_api_tokens",
+        "017_authorization_codes",
+        "018_seo",
+        "019_i18n",
+        "020_collection_url_pattern",
+        "021_remove_section_categories",
+        "022_marketplace_plugin_state",
+        "023_plugin_metadata",
+        "024_media_placeholders",
+        "025_oauth_clients",
+        "026_cron_tasks",
+        "027_comments",
+        "028_drop_author_url",
+        "029_redirects",
+        "030_widen_scheduled_index",
+        "031_bylines",
+        "032_rate_limits",
+        "033_optimize_content_indexes",
+        "034_published_at_index",
+        "035_bounded_404_log",
+        "036_i18n_menus_and_taxonomies",
+        "037_credential_algorithm",
+        "038_registry_plugin_state",
+        "039_fix_fts5_triggers",
+        "040_byline_i18n",
+        "041_content_locale_list_index",
+        "042_byline_fields",
+        "043_content_references",
+        "044_comment_reactions",
+        "045_taxonomy_parent_group",
+        "046_media_usage_index",
+        "047_restore_taxonomy_parent_index",
+        "048_restore_content_taxonomies_term_index",
+        "049_taxonomies_name_locale_index",
+        "050_media_usage_index_status",
+        "051_content_taxonomies_denorm",
+        "052_media_usage_read_index",
+        "053_plugin_mcp_tools",
+        "054_media_upload_attempts",
+        "055_content_translation_group_locale_index",
+        "056_taxonomy_term_sort_order",
+        "057_collection_hidden",
+        "058_collection_sort_order",
+        "059_revision_prune_queue",
+        "060_collection_admin_config",
+        "061_media_usage_cleanup",
+        "062_media_usage_cleanup_fence",
+        "063_media_usage_incremental_work",
+        "064_fts_plain_text",
+        "065_media_usage_collection_deletion",
+        "066_media_usage_reconciliation",
+        "067_indexed_content_fields",
+        "068_content_taxonomy_entry_groups",
+        "069_collection_title_date_fields",
+        "070_collection_routable",
+        "071_restore_content_bylines_table",
+        "072_media_folders",
+        "073_media_focal_point",
+        "074_content_deleted_scheduled_index",
+        "075_entry_edit_locks",
+        "076_collection_nav_group",
+        "077_plugin_storage_revisions",
+        "078_menu_item_translation_groups",
+        "079_datetime_normalization",
+        "080_content_translation_locale_unique",
+        "081_redirect_write_guards",
+        "082_taxonomy_translation_locale_unique",
+        "083_block_types",
+        "084_site_transfer",
+        "085_taxonomy_def_groups",
+        "086_relations_structural",
+        "087_reference_field_relations",
+        "088_cron_oneshot_utc",
+        "089_auto_seed_completion"
+      ],
+      "applied_count": 88,
+      "manifest_emdash_version": "0.42.0",
+      "note": "Read-only history inventory; no native migration apply ran.",
+      "manifest_fingerprint": "4a0f99ad0646f6c73a16399fccdacbc8ae5dad595e3ce5588904fa940a6e608b",
+      "expected_count": 88,
+      "pending_names": [],
+      "unknown_names": []
+    }
+  },
+  "cost_incident": {
+    "identified_usage_driver": "D1 taxonomy-count aggregate queries on the PTG production database",
+    "invoice_confirmed": false,
+    "periods": {
+      "july_retained": {
+        "first_date": "2026-07-10",
+        "last_date": "2026-07-31",
+        "days": 22,
+        "readQueries": 7557658,
+        "rowsRead": 33643105838,
+        "rowsWritten": 172528,
+        "writeQueries": 66956
+      },
+      "august": {
+        "first_date": "2026-08-01",
+        "last_date": "2026-08-31",
+        "days": 31,
+        "readQueries": 9748325,
+        "rowsRead": 616177673069,
+        "rowsWritten": 214500,
+        "writeQueries": 91093
+      },
+      "september": {
+        "first_date": "2026-09-01",
+        "last_date": "2026-09-30",
+        "days": 30,
+        "readQueries": 4033653,
+        "rowsRead": 1760783461,
+        "rowsWritten": 101179,
+        "writeQueries": 39679
+      }
+    },
+    "dominant_august_query": {
+      "avg": {
+        "rowsRead": 2529500,
+        "rowsWritten": 0
+      },
+      "count": 233184,
+      "dimensions": {
+        "query": "\n\t\tSELECT taxonomy_id, SUM(count) AS count\n\t\tFROM (\n\t\tSELECT ct.taxonomy_id AS taxonomy_id, COUNT(*) AS count\n\t\tFROM content_taxonomies AS ct\n\t\tINNER JOIN \"ec_posts\" AS e ON e.id = ct.entry_id\n\t\tWHERE ct.collection = ?\n\t\t\tAND ct.taxonomy_id IN (SELECT translation_group FROM taxonomies WHERE name = ?)\n\t\t\tAND (\"e\".\"status\" = 'published' OR (\"e\".\"status\" = 'scheduled' AND \"e\".\"scheduled_at\" <= strftime('%Y-%m-%dT%H:%M:%fZ', 'now')))\n\t\t\tAND e.deleted_at IS NULL\n\t\tGROUP BY ct.taxonomy_id) AS per_collection\n\t\tGROUP BY taxonomy_id"
+      },
+      "sum": {
+        "queryDurationMs": 314432512.4986,
+        "rowsRead": 589839151608,
+        "rowsWritten": 0
+      }
+    },
+    "secondary_august_query": {
+      "avg": {
+        "rowsRead": 4452417,
+        "rowsWritten": 0
+      },
+      "count": 8118,
+      "dimensions": {
+        "query": "\n\t\tSELECT taxonomy_id, SUM(count) AS count\n\t\tFROM (\n\t\tSELECT ct.taxonomy_id AS taxonomy_id, COUNT(DISTINCT e.translation_group) AS count\n\t\tFROM content_taxonomies AS ct\n\t\tCROSS JOIN \"ec_posts\" AS e\n\t\tWHERE e.translation_group = ct.entry_id\n\t\t\tAND ct.collection = ?\n\t\t\tAND ct.taxonomy_id IN (SELECT translation_group FROM taxonomies WHERE name = ?)\n\t\t\t\n\t\t\tAND \"e\".\"status\" = ?\n\t\t\tAND e.deleted_at IS NULL\n\t\tGROUP BY ct.taxonomy_id) AS per_collection\n\t\tGROUP BY taxonomy_id"
+      },
+      "sum": {
+        "queryDurationMs": 76264175.57430002,
+        "rowsRead": 36144725630,
+        "rowsWritten": 0
+      }
+    },
+    "metric_caveat": "Adaptive query-level analytics are separate sampled estimates; do not add query estimates as if they exactly reconcile with database-level row totals. Dates are UTC calendar dates, not invoice cycles.",
+    "august_read_overage_estimate_usd": 591.18,
+    "estimate_assumptions": "Published Workers Paid D1 pricing; calendar-month total treated as a billing month; shared 25-billion read allowance attributed to PTG; excludes credits, tax and other services. Not an invoice amount.",
+    "drop_evidence": {
+      "2026-08-23_rows_read": 24504856768,
+      "2026-08-24_rows_read": 101003750
+    },
+    "mitigation_in_live_source": "Base.astro requests taxonomy links with includeCounts:false. Native Workers cache, slim listing queries and metadata-only feeds are retained."
+  },
+  "current_cost_and_performance": {
+    "worker_seven_complete_days": [
+      {
+        "dimensions": {
+          "scriptName": "practical-travel-gear"
+        },
+        "sum": {
+          "cpuTimeUs": 2742176824,
+          "errors": 1,
+          "requests": 116434,
+          "subrequests": 10812
+        }
+      }
+    ],
+    "top_current_d1_queries": [
+      {
+        "avg": {
+          "rowsRead": 3149,
+          "rowsWritten": 0
+        },
+        "count": 13612,
+        "dimensions": {
+          "query": "select * from \"taxonomies\" where \"name\" = ? order by \"sort_order\" asc, \"label\" asc"
+        },
+        "sum": {
+          "queryDurationMs": 155050.15130000003,
+          "rowsRead": 42874243,
+          "rowsWritten": 0
+        }
+      },
+      {
+        "avg": {
+          "rowsRead": 20840,
+          "rowsWritten": 0
+        },
+        "count": 524,
+        "dimensions": {
+          "query": "delete from \"_emdash_404_log\" where \"id\" not in (select \"id\" from \"_emdash_404_log\" order by \"last_seen_at\" desc, \"id\" desc limit ?)"
+        },
+        "sum": {
+          "queryDurationMs": 27418.602699999996,
+          "rowsRead": 10920360,
+          "rowsWritten": 0
+        }
+      },
+      {
+        "avg": {
+          "rowsRead": 6255,
+          "rowsWritten": 0
+        },
+        "count": 595,
+        "dimensions": {
+          "query": "\n\t\tSELECT\n\t\t\tp.slug AS slug,\n\t\t\tp.title AS title,\n\t\t\tp.excerpt AS excerpt,\n\t\t\tp.featured_image AS featured_image,\n\t\t\tp.published_at AS published_at,\n\t\t\tb.display_name AS author_name\n\t\tFROM ec_posts p\n\t\tLEFT JOIN _emdash_bylines b\n\t\t\tON b.translation_group = p.primary_byline_id\n\t\t\tAND (b.locale = 'en' OR b.locale IS NULL)\n\t\n\t\tWHERE p.status = 'published'\n\t\t\tAND (p.deleted_at IS NULL OR p.deleted_at = '')\n\t\n\t\tORDER BY p.published_at DESC, p.id DESC\n\t\tLIMIT ? OFFSET ?\n\t"
+        },
+        "sum": {
+          "queryDurationMs": 32289.747400000007,
+          "rowsRead": 3721725,
+          "rowsWritten": 0
+        }
+      }
+    ],
+    "remaining_hotspots": [
+      "Taxonomy term listing scans approximately 3,149 rows per execution.",
+      "404-log pruning scans approximately 20,840 rows per execution.",
+      "Homepage/post-listing projection scans approximately 6,255 rows per execution; deleted_at IS NULL OR deleted_at empty predicate should be assessed against existing indexes.",
+      "Cache misses in page-2/search/private probe took about 15-23 seconds."
+    ],
+    "historical_worker_august_analytics": "Request rejected by analytics rate budget; not retried as load test."
+  },
+  "architecture": {
+    "public_request": "Native Workers cache may serve hits before Worker execution. Misses run EmDash/Astro, then CMS queries or direct D1 listing/feed projections, then cache/privacy policy.",
+    "images": "Early /img route uses R2 or static assets plus IMAGES binding, with original-byte fallback and native media invalidation tags.",
+    "scheduled": "Native EmDash createScheduledHandler runs existing five-minute cron. Local SQL publishing/prewarm code is obsolete relative to production.",
+    "plugins": [
+      "formsPlugin in main Worker",
+      "plugin-agentmail in main Worker",
+      "webhook notifier sandboxed through LOADER and PluginBridge"
+    ],
+    "content": "Live content/schema is in D1 and media in R2; a Git source sync is not a CMS content sync.",
+    "release_path": "Historical verified Cloudflare Workers Builds connection to GitHub main; pushes can deploy. Current Builds trigger settings and exact September 28 Git provenance were not re-verified."
+  },
+  "validation": {
+    "tests": {
+      "passed": 46,
+      "failed": 0
+    },
+    "typecheck": {
+      "files": 57,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 11
+    },
+    "test_runtime": {
+      "node": "26.7.0",
+      "npm": "11.19.0",
+      "note": "Existing installed dependencies were used. This was not a fresh install under the pinned Node 24.18.0 build runtime, and no rebuild replaced the retained matching artifact."
+    },
+    "public_probes": [
+      {
+        "path": "/",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 2.134,
+        "bytes": 30367,
+        "headers": {
+          "cf-cache-status": "EXPIRED",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=1451,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 0.221,
+        "bytes": 30367,
+        "headers": {
+          "cf-cache-status": "HIT",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=10,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/",
+        "private_cookie_probe": true,
+        "status": 200,
+        "seconds": 14.748,
+        "bytes": 30367,
+        "headers": {
+          "cf-cache-status": "BYPASS",
+          "cache-control": "private, no-store",
+          "server-timing": "cfEdge;dur=498,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/posts",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 1.121,
+        "bytes": 40378,
+        "headers": {
+          "cf-cache-status": "EXPIRED",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=618,cfOrigin;dur=0"
+        },
+        "article_hrefs": [
+          "/_astro/Base.JE-sbLHE.css",
+          "/subscribe",
+          "/guides",
+          "/category/travel-luggage-bags",
+          "/category/clothing",
+          "/category/shoes-boots",
+          "/category/travel-accessories",
+          "/category/camping-gear",
+          "/category/technology",
+          "/hiking-hydration-gear",
+          "/see-hawaii-with-shaka-guide-audio-driving-tours",
+          "/stay-warm-and-dry-with-cotopaxis-rayu-rain-parka-for-women",
+          "/pack-danner-womens-utility-shorts-for-your-next-hiking-trip",
+          "/stay-warmer-longer-with-bares-nixie-ultra-wetsuit",
+          "/sip-safely-with-lifestraw-sip-essential-water-filter-straw-bpa-free-plastic",
+          "/year-round-warmth-cotopaxis-abrazo-fleece-half-zip-jacket-for-women",
+          "/easily-capture-underwater-moments-with-your-iphone-proshot-dive-2-0",
+          "/arcade-ddc-go-easy-belt-brown-review-adventure-ready-style-and-comfort",
+          "/get-legroom-deserve-airoomy",
+          "/stay-connected-road-t-mobile",
+          "/refresh-adventure-wardrobe-royal-robbins-staples",
+          "/make-packing-easier-with-cotopaxis-viaje-45l-travel-duffel",
+          "/pack-power-nestouts-rugged-10000mah-power-bank",
+          "/backcountry-trail-riding-gear-ultra-comfort",
+          "/hydration-on-the-go-the-dometic-go-11-liter-jug-faucet"
+        ]
+      },
+      {
+        "path": "/posts?page=2",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 14.749,
+        "bytes": 41944,
+        "headers": {
+          "cf-cache-status": "MISS",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=13681,cfOrigin;dur=0"
+        },
+        "article_hrefs": [
+          "/_astro/Base.JE-sbLHE.css",
+          "/subscribe",
+          "/guides",
+          "/category/travel-luggage-bags",
+          "/category/clothing",
+          "/category/shoes-boots",
+          "/category/travel-accessories",
+          "/category/camping-gear",
+          "/category/technology",
+          "/keep-head-covered-stellar-wicking-hat",
+          "/on-the-go-in-le-bent-womens-featherweight-hooded-ls-crew",
+          "/wrap-tag-aloha-pareo",
+          "/stay-warm-finisterre-womens-penrose-sweater",
+          "/laundry-flexo-line-travelers-clothesline",
+          "/bring-tunes-along-jbl-clip-4-speaker",
+          "/538692-2",
+          "/great-fit-sensible-coverage-lands-end-womens-cotton-tank-top",
+          "/keep-outside-shoes-outside-topdrawer-kolo-house-shoes",
+          "/pack-smart-brown-buffalo-cordura-1050d-dopp-kit",
+          "/icebreaker-womens-merino-200-oasis-long-sleeve-half-zip-thermal-top-adventure-companion",
+          "/small-mighty-x-beams-x-rei-co-op-flexlight-camp-chair",
+          "/carve-designs-serenity-compression-one-piece-swimsuit-flatters-supports",
+          "/venture-forth-patagonia-pieces",
+          "/minimize-jet-lag-flykitt",
+          "/stay-warm-cozy-athleta-pranayama-restore-wrap"
+        ]
+      },
+      {
+        "path": "/search?q=hydration",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 22.74,
+        "bytes": 35243,
+        "headers": {
+          "cf-cache-status": "MISS",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=12126,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/hiking-hydration-gear",
+        "private_cookie_probe": false,
+        "status": 200,
+        "seconds": 0.23,
+        "bytes": 40926,
+        "headers": {
+          "cf-cache-status": "HIT",
+          "cache-control": "public, max-age=0, must-revalidate",
+          "x-ptg-cache-version": "4",
+          "server-timing": "cfEdge;dur=17,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/rss.xml",
+        "private_cookie_probe": false,
+        "status": 404,
+        "seconds": 0.398,
+        "bytes": 683,
+        "headers": {
+          "cf-cache-status": "BYPASS",
+          "cache-control": "private, no-store",
+          "server-timing": "cfEdge;dur=169,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/sitemap-pages.xml",
+        "private_cookie_probe": false,
+        "status": 404,
+        "seconds": 0.369,
+        "bytes": 683,
+        "headers": {
+          "cf-cache-status": "BYPASS",
+          "cache-control": "private, no-store",
+          "server-timing": "cfEdge;dur=149,cfOrigin;dur=0"
+        }
+      },
+      {
+        "path": "/this-page-does-not-exist-ptg-audit",
+        "private_cookie_probe": false,
+        "status": 404,
+        "seconds": 0.474,
+        "bytes": 683,
+        "headers": {
+          "cf-cache-status": "BYPASS",
+          "cache-control": "private, no-store",
+          "server-timing": "cfEdge;dur=202,cfOrigin;dur=0"
+        }
+      }
+    ],
+    "inconsistent_public_responses": "RSS and sitemap-pages initially returned 404 during this audit, then both returned 200 on retry with native-cache MISS. A homepage /img request initially returned 403, then the same source/width/format returned valid WebP bytes on retry. Response inconsistency remains unresolved. This is not proof all images fail or that historical quota is currently exhausted.",
+    "runtime_tail": "A bounded header-filtered tail confirmed the image request on live version with outcome ok and no exceptions; listener exited.",
+    "retry_evidence": {
+      "rss_status": 200,
+      "sitemap_pages_status": 200,
+      "homepage_image": {
+        "status": 200,
+        "format": "WebP",
+        "bytes": 76154
+      },
+      "live_version_unchanged": true
+    }
+  },
+  "starting_point": {
+    "code_baseline": "Use clean upgrade/emdash-042 at 4df36e9 and its verified deployed artifact. Preserve this dirty main checkout.",
+    "next_steps": [
+      "Reconcile the live 0.42 release into reviewed Git history, accounting for main auto-deploy behavior.",
+      "Obtain billing-read access or authenticated dashboard to match August D1 usage to exact invoice/cycle/credits.",
+      "Investigate response inconsistency and 15-23-second cache misses against the verified live source.",
+      "Use measured query plans and rows-read counts to reduce remaining taxonomy/listing/404-log reads; retain privacy and invalidation safeguards.",
+      "Establish daily usage tracking and spending alerts based on production Worker and D1 metrics."
+    ],
+    "authorization_limit": "This audit does not authorize a push/deployment, resource deletion, billing-plan change, or schema migration."
+  },
+  "sources": [
+    "https://developers.cloudflare.com/d1/platform/pricing/",
+    "https://developers.cloudflare.com/d1/observability/metrics-analytics/",
+    "https://developers.cloudflare.com/workers/platform/pricing/"
+  ],
+  "raw_evidence_directory": "/tmp/ptg-baseline-20261006"
+}

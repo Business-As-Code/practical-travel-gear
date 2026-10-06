@@ -1,20 +1,72 @@
 {
- "$schema":"node_modules/wrangler/config-schema.json",
- "name":"ptg-emdash-stage-20260921",
- "account_id":"eddf7805053d5e32afd090c3ec22126c",
- "main":"./src/worker.stage.ts",
- "workers_dev":true,
- "preview_urls":false,
- "compatibility_date":"2026-03-29",
- "compatibility_flags":["nodejs_compat"],
- "cache":{"enabled":true,"cross_version_cache":false},
- "assets":{"directory":"./dist","run_worker_first":true},
- "d1_databases":[{"binding":"DB","database_name":"ptg-emdash-stage-20260921","database_id":"083299a5-13df-491b-9dca-333828cd5d86"}],
- "r2_buckets":[{"binding":"MEDIA","bucket_name":"ptg-emdash-stage-20260921"}],
- "kv_namespaces":[{"binding":"SESSION","id":"0d424245813c4672a5e17903fa371c7e"}],
- "images":{"binding":"IMAGES"},
- "worker_loaders":[{"binding":"LOADER"}],
- "version_metadata":{"binding":"CF_VERSION_METADATA"},
- "observability":{"enabled":false},
- "triggers":{"crons":[]}
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ptg-emdash-stage-20260921",
+  "account_id": "eddf7805053d5e32afd090c3ec22126c",
+  "main": "./src/worker.stage.ts",
+  "workers_dev": true,
+  "preview_urls": false,
+  "compatibility_date": "2026-03-29",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "cache": {
+    "enabled": true,
+    "cross_version_cache": false
+  },
+  "assets": {
+    "directory": "./dist",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ptg-emdash-stage-20260921",
+      "database_id": "083299a5-13df-491b-9dca-333828cd5d86"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "ptg-emdash-stage-20260921"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "0d424245813c4672a5e17903fa371c7e"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "worker_loaders": [
+    {
+      "binding": "LOADER"
+    }
+  ],
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
+  "observability": {
+    "enabled": false
+  },
+  "triggers": {
+    "crons": []
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SEARCH_LIMITER",
+        "class_name": "PublicSearchLimiter"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "ptg-search-limiter-v1",
+      "new_sqlite_classes": [
+        "PublicSearchLimiter"
+      ]
+    }
+  ]
 }

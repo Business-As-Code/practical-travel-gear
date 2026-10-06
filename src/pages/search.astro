@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import { getEmDashCollection, search } from "emdash";
+import { contentUnavailable } from "../lib/content-response";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
 import { getReadingTime } from "../utils/reading-time";
@@ -19,6 +20,7 @@ const found = matches.items.length
 		limit: 21,
 	})
 	: null;
+if (found?.error) return contentUnavailable(found.error);
 if (found) Astro.cache.set(found.cacheHint);
 const byId = new Map(found?.entries.map((post) => [post.data.id, post]) ?? []);
 const results = matches.items.flatMap((item) => {

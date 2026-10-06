@@ -1,4 +1,5 @@
 ---
+import { contentUnavailable } from "../../lib/content-response";
 import {
 	getEmDashEntry,
 	getEntryTerms,
@@ -17,7 +18,9 @@ if (!slug) {
 	return rewriteNotFound(Astro);
 }
 
-const { entry: guide, cacheHint } = await getEmDashEntry("guides", slug);
+const { entry: guide, cacheHint, error } = await getEmDashEntry("guides", slug);
+
+if (error) return contentUnavailable(error);
 
 if (!guide) {
 	return rewriteNotFound(Astro);
