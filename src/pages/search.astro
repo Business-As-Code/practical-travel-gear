@@ -1,32 +1,41 @@
 ---
 export const prerender = false;
 
-import { getEmDashCollection, search } from "emdash";
+import { search } from "emdash";
 import { contentUnavailable } from "../lib/content-response";
+import { listCards } from "../lib/listing-cards";
 import Base from "../layouts/Base.astro";
 import PostCard from "../components/PostCard.astro";
-import { getReadingTime } from "../utils/reading-time";
 
 const query = Astro.url.searchParams.get("q")?.trim().slice(0, 200) || "";
 const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
-const matches = query
-	? await search(query, { collections: ["posts"], limit: 21, cursor })
-	: { items: [], nextCursor: undefined };
+let matches: { items: Array<{ id: string }>; nextCursor?: string };
+try {
+	matches = query
+		? await search(query, { collections: ["posts"], limit: 21, cursor })
+		: { items: [], nextCursor: undefined };
+} catch (error) {
+	return contentUnavailable(error);
+}
 
-// Query the search index first; hydrate only this page's matched articles.
-const found = matches.items.length
-	? await getEmDashCollection("posts", {
-		where: { id: matches.items.map((item) => item.id) },
-		limit: 21,
-	})
-	: null;
-if (found?.error) return contentUnavailable(found.error);
-if (found) Astro.cache.set(found.cacheHint);
-const byId = new Map(found?.entries.map((post) => [post.data.id, post]) ?? []);
-const results = matches.items.flatMap((item) => {
-	const post = byId.get(item.id);
-	return post ? [post] : [];
-});
+// The search index already picked this page. Load card columns for those ids only.
+let results: Awaited<ReturnType<typeof listCards>>["cards"] = [];
+if (matches.items.length) {
+	try {
+		const found = await listCards("posts", {
+			ids: matches.items.map((item) => item.id),
+			limit: 21,
+		});
+		const byId = new Map(found.cards.map((post) => [post.id, post]));
+		results = matches.items.flatMap((item) => {
+			const post = byId.get(item.id);
+			return post ? [post] : [];
+		});
+	} catch (error) {
+		return contentUnavailable(error);
+	}
+}
+if (query) Astro.cache.set({ maxAge: 300, tags: ["posts"] });
 
 ---
 
@@ -64,12 +73,12 @@ const results = matches.items.flatMap((item) => {
 				<div class="search-results">
 					{results.map((post) => (
 						<PostCard
-							title={post.data.title}
-							excerpt={post.data.excerpt}
-							featuredImage={post.data.featured_image}
-							href={`/${post.id}`}
-							date={post.data.publishedAt ?? undefined}
-							readingTime={getReadingTime(post.data.content)}
+							title={post.title}
+							excerpt={post.excerpt ?? undefined}
+							featuredImage={post.featuredImage}
+							href={post.href}
+							date={post.publishedAt ?? undefined}
+							author={post.authorName}
 						/>
 					))}
 				</div>

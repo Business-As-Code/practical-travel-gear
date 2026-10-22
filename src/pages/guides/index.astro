@@ -1,31 +1,14 @@
 ---
-import { contentUnavailable } from "../../lib/content-response";
-import { getEmDashCollection, getEntryTerms } from "emdash";
+import { listCards, nextListingHref, parseListingAfter } from "../../lib/listing-cards";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
-import { getReadingTime } from "../../utils/reading-time";
 
-const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
-const { entries: guides, nextCursor, cacheHint, error } = await getEmDashCollection("guides", {
-	orderBy: { published_at: "desc" },
+Astro.cache.set({ maxAge: 300, tags: ["guides"] });
+const { cards: guides, hasMore } = await listCards("guides", {
 	limit: 21,
-	cursor,
+	after: parseListingAfter(Astro.url.searchParams.get("after")),
 });
-
-if (error) return contentUnavailable(error);
-Astro.cache.set(cacheHint);
-
-const guidesWithMeta = await Promise.all(
-	guides.map(async (guide) => {
-		const tags = await getEntryTerms("guides", guide.data.id, "tag");
-		return {
-			guide,
-			tags,
-			bylines: guide.data.bylines ?? [],
-			readingTime: getReadingTime(guide.data.content),
-		};
-	}),
-);
+const nextHref = nextListingHref("/guides", guides, hasMore);
 ---
 
 <Base
@@ -59,24 +42,22 @@ const guidesWithMeta = await Promise.all(
 				<p class="no-posts">No guides yet.</p>
 			) : (
 				<div class="river">
-					{guidesWithMeta.map(({ guide, tags, bylines, readingTime }) => (
+					{guides.map((guide) => (
 						<PostCard
-							title={guide.data.title ?? "Untitled"}
-							excerpt={guide.data.excerpt}
-							featuredImage={guide.data.featured_image}
-							href={`/guides/${guide.id}`}
-							date={guide.data.publishedAt ?? undefined}
-							readingTime={readingTime}
-							tags={tags.map((t) => ({ slug: t.slug, label: t.label }))}
-							bylines={bylines}
+							title={guide.title}
+							excerpt={guide.excerpt ?? undefined}
+							featuredImage={guide.featuredImage}
+							href={guide.href}
+							date={guide.publishedAt ?? undefined}
+							author={guide.authorName}
 							kicker="Guide"
 							variant="feature"
 						/>
 					))}
 				</div>
 			)}
-			{nextCursor && (
-				<div class="pagination"><a class="page-link" href={`/guides?cursor=${encodeURIComponent(nextCursor)}`}>More guides →</a></div>
+			{nextHref && (
+				<div class="pagination"><a class="page-link" href={nextHref}>More guides →</a></div>
 			)}
 		</div>
 	</section>

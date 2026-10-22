@@ -13,7 +13,55 @@ diff --git a/node_modules/emdash/src/astro/prefetch.ts b/node_modules/emdash/src
 diff --git a/node_modules/emdash/src/database/repositories/redirect.ts b/node_modules/emdash/src/database/repositories/redirect.ts
 --- a/node_modules/emdash/src/database/repositories/redirect.ts
 +++ b/node_modules/emdash/src/database/repositories/redirect.ts
-@@ -717,13 +717,13 @@
+@@ -685,45 +685,37 @@
+ 	}
+ 
+ 	/**
+-	 * Delete the oldest rows from `_emdash_404_log` if the row count exceeds
+-	 * MAX_404_LOG_ROWS. "Oldest" is by `last_seen_at`, so a path that keeps
+-	 * getting hit stays in the table even if it was first seen long ago.
++	 * Delete the oldest rows from `_emdash_404_log` when `ptg_404_cardinality`
++	 * is over MAX_404_LOG_ROWS. That counter is one row maintained by triggers
++	 * (migrations/site/2026-10-22-404-cardinality.sql). Counting the log itself
++	 * reads every row on D1, and an overflow DELETE used to scan thousands of
++	 * rows on every cron tick even when the table was under the cap.
++	 *
++	 * Each run deletes at most 100 oldest rows so a backlog cannot turn one
++	 * statement into an unbounded scan. "Oldest" is `last_seen_at`, then `id`,
++	 * so a path that keeps getting hit stays. Under the cap this reads only
++	 * the counter and does not touch the log.
+ 	 *
+ 	 * Called by scheduled system cleanup, never by the anonymous request path.
+ 	 */
+ 	async cleanup404Log(): Promise<number> {
+-		// Cheap precheck: the expensive DELETE is only needed once the table
+-		// has grown past MAX_404_LOG_ROWS. Counting a bounded sample avoids
+-		// the full-table ORDER BY/NOT IN scan on the overwhelming majority
+-		// of cron ticks when there is nothing to evict.
+-		const probe = await this.db
+-			.selectFrom(
+-				this.db
+-					.selectFrom("_emdash_404_log")
+-					.select(sql`1`.as("one"))
+-					.limit(MAX_404_LOG_ROWS + 1)
+-					.as("sample"),
+-			)
+-			.select(({ fn }) => fn.countAll<number>().as("count"))
+-			.executeTakeFirstOrThrow();
+-		if (Number(probe.count) <= MAX_404_LOG_ROWS) {
+-			return 0;
+-		}
+-
+-		// Keep the newest rows in one statement. Deriving the victims inside the
+-		// DELETE makes overlapping cleanup runs idempotent: each statement
+-		// evaluates the current newest set instead of acting on a stale count.
++		const counted = await sql<{ row_count: number | string | bigint }>`
++			select row_count from ptg_404_cardinality where id = ${1}
++		`.execute(this.db);
++		const total = Number(counted.rows[0]?.row_count ?? 0);
++		if (!Number.isFinite(total) || total <= MAX_404_LOG_ROWS) return 0;
++		const batch = Math.min(total - MAX_404_LOG_ROWS, 100);
+ 		const result = await this.db
  			.deleteFrom("_emdash_404_log")
  			.where(
  				"id",
@@ -22,10 +70,12 @@ diff --git a/node_modules/emdash/src/database/repositories/redirect.ts b/node_mo
  				this.db
  					.selectFrom("_emdash_404_log")
  					.select("id")
- 					.orderBy("last_seen_at", "desc")
- 					.orderBy("id", "desc")
+-					.orderBy("last_seen_at", "desc")
+-					.orderBy("id", "desc")
 -					.limit(MAX_404_LOG_ROWS),
-+					.limit(2147483647).offset(MAX_404_LOG_ROWS),
++					.orderBy("last_seen_at", "asc")
++					.orderBy("id", "asc")
++					.limit(batch),
  			)
  			.executeTakeFirst();
  		return Number(result.numDeletedRows);
@@ -66,12 +116,35 @@ diff --git a/node_modules/emdash/dist/public-plugin-api-routes-ik4fPZMv.mjs b/no
 diff --git a/node_modules/emdash/dist/redirect-DcmNMvOs.mjs b/node_modules/emdash/dist/redirect-DcmNMvOs.mjs
 --- a/node_modules/emdash/dist/redirect-DcmNMvOs.mjs
 +++ b/node_modules/emdash/dist/redirect-DcmNMvOs.mjs
-@@ -351,7 +351,7 @@
+@@ -342,16 +342,25 @@
+ 		})).execute();
+ 	}
+ 	/**
+-	* Delete the oldest rows from `_emdash_404_log` if the row count exceeds
+-	* MAX_404_LOG_ROWS. "Oldest" is by `last_seen_at`, so a path that keeps
+-	* getting hit stays in the table even if it was first seen long ago.
++	* Delete the oldest rows from `_emdash_404_log` when `ptg_404_cardinality`
++	* is over MAX_404_LOG_ROWS. That counter is one row maintained by triggers
++	* (migrations/site/2026-10-22-404-cardinality.sql). Counting the log itself
++	* reads every row on D1, and an overflow DELETE used to scan thousands of
++	* rows on every cron tick even when the table was under the cap.
++	*
++	* Each run deletes at most 100 oldest rows so a backlog cannot turn one
++	* statement into an unbounded scan. "Oldest" is `last_seen_at`, then `id`,
++	* so a path that keeps getting hit stays. Under the cap this reads only
++	* the counter and does not touch the log.
+ 	*
+ 	* Called by scheduled system cleanup, never by the anonymous request path.
+ 	*/
  	async cleanup404Log() {
- 		const probe = await this.db.selectFrom(this.db.selectFrom("_emdash_404_log").select(sql`1`.as("one")).limit(MAX_404_LOG_ROWS + 1).as("sample")).select(({ fn }) => fn.countAll().as("count")).executeTakeFirstOrThrow();
- 		if (Number(probe.count) <= MAX_404_LOG_ROWS) return 0;
+-		const probe = await this.db.selectFrom(this.db.selectFrom("_emdash_404_log").select(sql`1`.as("one")).limit(MAX_404_LOG_ROWS + 1).as("sample")).select(({ fn }) => fn.countAll().as("count")).executeTakeFirstOrThrow();
+-		if (Number(probe.count) <= MAX_404_LOG_ROWS) return 0;
 -		const result = await this.db.deleteFrom("_emdash_404_log").where("id", "not in", this.db.selectFrom("_emdash_404_log").select("id").orderBy("last_seen_at", "desc").orderBy("id", "desc").limit(MAX_404_LOG_ROWS)).executeTakeFirst();
-+		const result = await this.db.deleteFrom("_emdash_404_log").where("id", "in", this.db.selectFrom("_emdash_404_log").select("id").orderBy("last_seen_at", "desc").orderBy("id", "desc").limit(2147483647).offset(MAX_404_LOG_ROWS)).executeTakeFirst();
++		const counted = await sql`select row_count from ptg_404_cardinality where id = ${1}`.execute(this.db);
++		const total = Number(counted.rows[0]?.row_count ?? 0);
++		if (!Number.isFinite(total) || total <= MAX_404_LOG_ROWS) return 0;
++		const batch = Math.min(total - MAX_404_LOG_ROWS, 100);
++		const result = await this.db.deleteFrom("_emdash_404_log").where("id", "in", this.db.selectFrom("_emdash_404_log").select("id").orderBy("last_seen_at", "asc").orderBy("id", "asc").limit(batch)).executeTakeFirst();
  		return Number(result.numDeletedRows);
  	}
  	async find404s(opts) {

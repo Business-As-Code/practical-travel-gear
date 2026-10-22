@@ -1,16 +1,15 @@
 ---
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
-import { listCards } from "../../lib/listing-cards";
+import { listCards, nextListingHref, parseListingAfter } from "../../lib/listing-cards";
 
-const rawPage = Number(Astro.url.searchParams.get("page") ?? "1");
-const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? Math.min(rawPage, 10000) : 1;
 Astro.cache.set({ maxAge: 300, tags: ["posts"] });
 const perPage = 21;
 const { cards: posts, hasMore } = await listCards("posts", {
 	limit: perPage,
-	offset: (page - 1) * perPage,
+	after: parseListingAfter(Astro.url.searchParams.get("after")),
 });
+const nextHref = nextListingHref("/posts", posts, hasMore);
 ---
 
 <Base
@@ -52,9 +51,9 @@ const { cards: posts, hasMore } = await listCards("posts", {
 				</div>
 			)}
 
-			{hasMore && (
+			{nextHref && (
 				<div class="pagination">
-					<a href={`/posts?page=${page + 1}`} class="page-link">
+					<a href={nextHref} class="page-link">
 						Older stories →
 					</a>
 				</div>

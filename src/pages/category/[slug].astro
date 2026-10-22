@@ -3,12 +3,10 @@ import { getArchiveTerm } from "../../lib/archive-term";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { rewriteNotFound } from "../../lib/not-found";
-import { listCards } from "../../lib/listing-cards";
+import { listCards, nextListingHref, parseListingAfter } from "../../lib/listing-cards";
 
 const { slug } = Astro.params;
 const term = await getArchiveTerm("category", slug);
-const rawPage = Number(Astro.url.searchParams.get("page") ?? "1");
-const page = Number.isSafeInteger(rawPage) && rawPage > 0 ? Math.min(rawPage, 10000) : 1;
 Astro.cache.set({ maxAge: 300, tags: ["posts", "emdash:taxonomy:category"] });
 
 if (!term) {
@@ -17,9 +15,10 @@ if (!term) {
 
 const { cards: posts, hasMore } = await listCards("posts", {
 	limit: 24,
-	offset: (page - 1) * 24,
+	after: parseListingAfter(Astro.url.searchParams.get("after")),
 	term: { name: "category", slug: term.slug },
 });
+const nextHref = nextListingHref(`/category/${slug}`, posts, hasMore);
 ---
 
 <Base
@@ -60,7 +59,7 @@ const { cards: posts, hasMore } = await listCards("posts", {
 					))}
 				</div>
 			)}
-			{hasMore && <p class="pagination"><a href={`/category/${slug}?page=${page + 1}`}>Older stories →</a></p>}
+			{nextHref && <p class="pagination"><a href={nextHref}>Older stories →</a></p>}
 		</div>
 	</section>
 </Base>
