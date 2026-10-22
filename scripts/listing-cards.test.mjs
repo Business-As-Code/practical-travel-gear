@@ -31,6 +31,12 @@ test('slim listing queries omit bodies, hide drafts, order ties, filter terms an
     assert.equal(second.cards[0].slug, 'post-01');
     const tagged = await queryCards(db, 'posts', {term:{name:'tag',slug:'bags'}});
     assert.deepEqual(tagged.cards.map(p=>p.slug), ['post-02']);
+    sqlite.exec(`CREATE TABLE _emdash_content_bylines (collection_slug TEXT, content_id TEXT, byline_id TEXT);
+      INSERT INTO _emdash_content_bylines VALUES ('posts','01','shared-credit-group'), ('posts','03','shared-credit-group');`);
+    const credited = await queryCards(db, 'posts', {bylineId:'shared-credit-group', limit:12});
+    assert.deepEqual(credited.cards.map(p=>p.slug), ['post-01']);
+    const picked = await queryCards(db, 'posts', {ids:['01','02'], limit:21});
+    assert.deepEqual(picked.cards.map(p=>p.id), ['01','02']);
     assert.ok(queries.every(sql=>!sql.includes('p.content') && !sql.includes('SELECT *')));
   } finally { sqlite.close(); }
 });

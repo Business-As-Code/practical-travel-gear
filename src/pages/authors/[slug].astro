@@ -1,6 +1,6 @@
 ---
-import { getEntriesByByline, getBylineBySlug } from "emdash";
 import Base from "../../layouts/Base.astro";
+import { listCards } from "../../lib/listing-cards";
 import { rewriteNotFound } from "../../lib/not-found";
 import { loadAuthor } from "../../utils/authors";
 
@@ -15,21 +15,12 @@ if (!author) {
 	return rewriteNotFound(Astro);
 }
 
-const byline = await getBylineBySlug(slug);
-const posts = byline
-	? await getEntriesByByline("posts", byline.translationGroup ?? byline.id, {
-			status: "published",
-			limit: 12,
-			orderBy: { published_at: "desc" },
-		})
-	: [];
-const guides = byline
-	? await getEntriesByByline("guides", byline.translationGroup ?? byline.id, {
-			status: "published",
-			limit: 8,
-			orderBy: { published_at: "desc" },
-		})
-	: [];
+const posts = (
+	await listCards("posts", { bylineId: author.translationGroup, limit: 12 })
+).cards;
+const guides = (
+	await listCards("guides", { bylineId: author.translationGroup, limit: 8 })
+).cards;
 ---
 
 <Base
@@ -69,7 +60,7 @@ const guides = byline
 					<ul>
 						{guides.map((g) => (
 							<li>
-								<a href={`/guides/${g.id}`}>{(g.data.title as string) || g.id}</a>
+								<a href={g.href}>{g.title}</a>
 							</li>
 						))}
 					</ul>
@@ -81,7 +72,7 @@ const guides = byline
 					<ul>
 						{posts.map((p) => (
 							<li>
-								<a href={`/${p.id}`}>{(p.data.title as string) || p.id}</a>
+								<a href={p.href}>{p.title}</a>
 							</li>
 						))}
 					</ul>

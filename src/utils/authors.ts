@@ -38,6 +38,8 @@ export type AuthorCard = {
 	avatar: string;
 	websiteUrl: string | null;
 	featured: boolean;
+	/** Credit key stored on content bylines. Locale variants share one group. */
+	translationGroup: string;
 };
 
 export async function loadAuthor(slug: string): Promise<AuthorCard | null> {
@@ -52,6 +54,7 @@ export async function loadAuthor(slug: string): Promise<AuthorCard | null> {
 			: getBylineAvatar(byline.slug),
 		websiteUrl: byline.websiteUrl,
 		featured: FEATURED_SLUGS.has(byline.slug),
+		translationGroup: byline.translationGroup ?? byline.id,
 	};
 }
 

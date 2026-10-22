@@ -2,10 +2,10 @@
 import { contentUnavailable } from "../../lib/content-response";
 import {
 	getEmDashEntry,
-	getEmDashCollection,
 	getEntryTerms,
 	getSeoMeta,
 } from "emdash";
+import { listCards } from "../../lib/listing-cards";
 import { PortableText } from "emdash/ui";
 import { CommentForm } from "emdash/ui/comments";
 import Base from "../../layouts/Base.astro";
@@ -70,23 +70,15 @@ const seo = getSeoMeta(post, {
 });
 
 // Fetch post metadata + recent posts for "Continue reading" in parallel.
-const [tags, categories, { entries: recentPosts }] = await Promise.all([
+const [tags, categories, recent] = await Promise.all([
 	getEntryTerms("posts", post.data.id, "tag"),
 	getEntryTerms("posts", post.data.id, "category"),
-	getEmDashCollection("posts", {
-		orderBy: { published_at: "desc" },
-		limit: 4,
-	}),
+	listCards("posts", { limit: 4 }),
 ]);
 const bylines = post.data.bylines ?? [];
 const readingTime = getReadingTime(post.data.content);
 
-const otherPosts = recentPosts.filter((p) => p.id !== post.id).slice(0, 3);
-const otherPostsWithTags = otherPosts.map((p) => ({
-	post: p,
-	tags: [] as typeof tags,
-	bylines: p.data.bylines ?? [],
-}));
+const otherPosts = recent.cards.filter((card) => card.slug !== slug).slice(0, 3);
 
 const publishDate =
 	post.data.publishedAt?.toLocaleDateString("en-US", {
@@ -245,30 +237,23 @@ const primaryAuthorInitials = primaryAuthor
 						<CommentForm collection="posts" contentId={post.data.id} />
 					</div>
 
-					{otherPostsWithTags.length > 0 && (
+					{otherPosts.length > 0 && (
 						<div class="more-posts">
 							<div class="section-head">
 								<h2>Continue <span class="sub">Reading</span></h2>
 								<a class="viewall" href="/posts">All posts →</a>
 							</div>
 							<div class="river">
-								{otherPostsWithTags.map(
-									({ post: p, tags: postTags, bylines: postBylines }) => (
-										<PostCard
-											title={p.data.title}
-											excerpt={p.data.excerpt}
-											featuredImage={p.data.featured_image}
-											href={`/${p.id}`}
-											date={p.data.publishedAt ?? undefined}
-											readingTime={getReadingTime(p.data.content)}
-											tags={postTags.map((t) => ({
-												slug: t.slug,
-												label: t.label,
-											}))}
-											bylines={postBylines}
-										/>
-									),
-								)}
+								{otherPosts.map((card) => (
+									<PostCard
+										title={card.title}
+										excerpt={card.excerpt ?? undefined}
+										featuredImage={card.featuredImage}
+										href={card.href}
+										date={card.publishedAt ?? undefined}
+										author={card.authorName}
+									/>
+								))}
 							</div>
 						</div>
 					)}
