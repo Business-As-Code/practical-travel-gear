@@ -35,7 +35,7 @@ test('ten visible tags and published listings use indexes without temporary sort
 });
 
 test('patched cleanup retains newest ten thousand including tied timestamps', async () => {
-  const { t: RedirectRepository } = await import('../node_modules/emdash/dist/redirect-xZNpBoGp.mjs');
+  const { t: RedirectRepository } = await import('../node_modules/emdash/dist/redirect-DcmNMvOs.mjs');
   // Run the actual compiled repository query against SQLite, including its binds.
   const { Kysely, DummyDriver, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler } = await import('kysely');
   const db = new Kysely({ dialect: { createAdapter: () => new SqliteAdapter(), createDriver: () => new DummyDriver(), createIntrospector: d => new SqliteIntrospector(d), createQueryCompiler: () => new SqliteQueryCompiler() } });
@@ -44,7 +44,23 @@ test('patched cleanup retains newest ten thousand including tied timestamps', as
   const repository = new RedirectRepository({ deleteFrom: (...args) => {
     const query = capture.deleteFrom(...args);
     return { where: (...where) => { const q = query.where(...where); return { async executeTakeFirst() { compiled = q.compile(); return { numDeletedRows: 0n }; } }; } };
-  }, selectFrom: (...args) => capture.selectFrom(...args) });
+  }, selectFrom: (...args) => {
+    // 1.3.1 probes the row count before deleting. Report a table over the cap
+    // so the patched DELETE still compiles, then run that SQL on SQLite.
+    const wrap = (builder) => {
+      builder.executeTakeFirstOrThrow = async () => ({ count: 10005 });
+      for (const method of ['select', 'limit', 'orderBy', 'where', 'offset']) {
+        const original = builder[method];
+        if (typeof original !== 'function') continue;
+        builder[method] = (...methodArgs) => {
+          const next = original.apply(builder, methodArgs);
+          return next && typeof next === 'object' ? wrap(next) : next;
+        };
+      }
+      return builder;
+    };
+    return wrap(capture.selectFrom(...args));
+  } });
   const sqlite = new DatabaseSync(':memory:');
   sqlite.exec('CREATE TABLE _emdash_404_log (id TEXT PRIMARY KEY, last_seen_at TEXT); CREATE INDEX ptg_404_recent ON _emdash_404_log (last_seen_at DESC,id DESC)');
   const insert = sqlite.prepare('INSERT INTO _emdash_404_log VALUES (?,?)');
